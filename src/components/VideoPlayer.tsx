@@ -1,6 +1,22 @@
-import { Film, HardDriveDownload, Play } from "lucide-react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import {
+  Film,
+  HardDriveDownload,
+  Maximize,
+  Minimize,
+  Play,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { assetUrl, fileExists } from "@/lib/videos";
+
+/** Bascule le plein écran de la fenêtre Tauri (sans planter hors Tauri). */
+async function setWindowFullscreen(on: boolean) {
+  try {
+    await getCurrentWindow().setFullscreen(on);
+  } catch {
+    /* hors Tauri : ignore */
+  }
+}
 
 interface Props {
   /** Chemin de la vidéo relatif au dossier `videos/`. */
@@ -19,6 +35,27 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
   const [status, setStatus] = useState<Status>("checking");
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [posterSrc, setPosterSrc] = useState<string | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  function toggleFullscreen() {
+    setFullscreen((on) => {
+      setWindowFullscreen(!on);
+      return !on;
+    });
+  }
+
+  // Échap quitte le plein écran.
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setFullscreen(false);
+        setWindowFullscreen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fullscreen]);
 
   // Réinitialise quand on change de leçon.
   useEffect(() => {
@@ -58,16 +95,36 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
     "relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-line bg-base";
 
   if (status === "playing" && videoSrc) {
+    // Même élément <video> dans les deux modes (pas de remontage → lecture
+    // continue). On change seulement le conteneur.
+    const container = fullscreen
+      ? "fixed inset-0 z-[100] flex items-center justify-center bg-black"
+      : frame;
     return (
-      <div className={frame}>
+      <div className={container}>
+        {/* biome-ignore lint/a11y/useMediaCaption: contenu perso sans sous-titres */}
         <video
           src={videoSrc}
           controls
           autoPlay
-          className="h-full w-full bg-black"
+          className={
+            fullscreen
+              ? "max-h-full max-w-full object-contain"
+              : "h-full w-full bg-black"
+          }
+        />
+        <button
+          type="button"
+          aria-label={fullscreen ? "Quitter le plein écran" : "Plein écran"}
+          onClick={toggleFullscreen}
+          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg border border-line/60 bg-base/70 text-ink-muted backdrop-blur transition-colors hover:border-amber/60 hover:text-amber"
         >
-          <track kind="captions" />
-        </video>
+          {fullscreen ? (
+            <Minimize className="h-4 w-4" />
+          ) : (
+            <Maximize className="h-4 w-4" />
+          )}
+        </button>
       </div>
     );
   }
