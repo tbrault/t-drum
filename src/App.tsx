@@ -1,15 +1,65 @@
+import { useEffect, useState } from "react";
+import { progressStore, useProgressLoaded } from "@/progress/store";
+import { CalendarView } from "@/routes/CalendarView";
+import { Dashboard } from "@/routes/Dashboard";
+import { LessonView } from "@/routes/LessonView";
+import { NiveauView } from "@/routes/NiveauView";
+
+type View =
+  | { name: "dashboard" }
+  | { name: "niveau"; numero: number }
+  | { name: "lesson"; id: string }
+  | { name: "calendar" };
+
 function App() {
+  const [view, setView] = useState<View>({ name: "dashboard" });
+  const loaded = useProgressLoaded();
+
+  useEffect(() => {
+    progressStore.load();
+  }, []);
+
+  if (!loaded) {
+    return (
+      <main className="flex min-h-screen items-center justify-center">
+        <span className="animate-pulse font-mono text-sm uppercase tracking-widest text-ink-faint">
+          Chargement…
+        </span>
+      </main>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-text-primary">T-Drum</h1>
-        <p className="text-text-secondary">Suivi de progression batterie</p>
-        <div className="h-2 w-48 mx-auto bg-bg-tertiary rounded-full overflow-hidden">
-          <div className="h-full w-1/3 bg-accent-primary rounded-full" />
-        </div>
-      </div>
-    </div>
-  )
+    <main className="min-h-screen">
+      {view.name === "dashboard" && (
+        <Dashboard
+          onOpenNiveau={(numero) => setView({ name: "niveau", numero })}
+          onOpenLesson={(id) => setView({ name: "lesson", id })}
+          onOpenCalendar={() => setView({ name: "calendar" })}
+        />
+      )}
+      {view.name === "calendar" && (
+        <CalendarView
+          onDashboard={() => setView({ name: "dashboard" })}
+          onOpenLesson={(id) => setView({ name: "lesson", id })}
+        />
+      )}
+      {view.name === "niveau" && (
+        <NiveauView
+          numero={view.numero}
+          onDashboard={() => setView({ name: "dashboard" })}
+          onOpenLesson={(id) => setView({ name: "lesson", id })}
+        />
+      )}
+      {view.name === "lesson" && (
+        <LessonView
+          lessonId={view.id}
+          onDashboard={() => setView({ name: "dashboard" })}
+          onNiveau={(numero) => setView({ name: "niveau", numero })}
+        />
+      )}
+    </main>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,7 @@
+# Vidéos de la formation : les .mp4 sont lourds → hors dépôt.
+# Les vignettes (posters/) sont versionnées pour être dispo sans Claude/ffmpeg.
+*
+!.gitkeep
+!.gitignore
+!posters/
+!posters/**

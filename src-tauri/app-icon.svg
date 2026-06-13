@@ -1,0 +1,53 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.32" r="0.9">
+      <stop offset="0" stop-color="#26221d"/>
+      <stop offset="1" stop-color="#161518"/>
+    </radialGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6ad33"/>
+      <stop offset="1" stop-color="#c97e1c"/>
+    </linearGradient>
+    <linearGradient id="head" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf3df"/>
+      <stop offset="1" stop-color="#e9dcc0"/>
+    </linearGradient>
+    <linearGradient id="stick" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0dcab"/>
+      <stop offset="1" stop-color="#caa564"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <rect x="6" y="6" width="1012" height="1012" rx="218" fill="none" stroke="#f6ad33" stroke-opacity="0.12" stroke-width="3"/>
+
+  <!-- Baguettes croisées -->
+  <g stroke-linecap="round">
+    <line x1="300" y1="232" x2="744" y2="476" stroke="#1c1a18" stroke-width="46"/>
+    <line x1="724" y1="232" x2="280" y2="476" stroke="#1c1a18" stroke-width="46"/>
+    <line x1="300" y1="232" x2="744" y2="476" stroke="url(#stick)" stroke-width="34"/>
+    <line x1="724" y1="232" x2="280" y2="476" stroke="url(#stick)" stroke-width="34"/>
+    <circle cx="300" cy="232" r="26" fill="#f0dcab"/>
+    <circle cx="724" cy="232" r="26" fill="#f0dcab"/>
+  </g>
+
+  <!-- Corps du tambour -->
+  <path d="M232 560 L232 712 A280 96 0 0 0 792 712 L792 560 Z" fill="url(#shell)"/>
+  <!-- Câbles de tension (zigzag) -->
+  <g stroke="#fbf3df" stroke-width="14" stroke-linecap="round" opacity="0.92">
+    <path d="M262 556 L300 716 L362 556 L424 716 L486 556 L548 716 L610 556 L672 716 L734 556 L762 700"/>
+  </g>
+  <!-- Cercles haut et bas -->
+  <ellipse cx="512" cy="712" rx="280" ry="96" fill="none" stroke="#a9701f" stroke-width="22"/>
+  <ellipse cx="512" cy="560" rx="280" ry="96" fill="url(#head)"/>
+  <ellipse cx="512" cy="560" rx="280" ry="96" fill="none" stroke="#a9701f" stroke-width="22"/>
+  <!-- Tirants -->
+  <g fill="#d89433">
+    <rect x="244" y="556" width="26" height="160" rx="8"/>
+    <rect x="754" y="556" width="26" height="160" rx="8"/>
+  </g>
+
+  <!-- Reflet sur la peau -->
+  <ellipse cx="430" cy="535" rx="120" ry="34" fill="#ffffff" opacity="0.28"/>
+</svg>

@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# T-Drum
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+App desktop macOS (Tauri) de suivi de progression pour la formation batterie
+— niveaux 7 à 23, trois volumes. Le contenu pédagogique (consignes) est intégré
+au code ; la progression personnelle est sauvegardée en local.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Node](https://nodejs.org) (voir `.nvmrc`) + [pnpm](https://pnpm.io)
+- [Rust](https://rustup.rs) (toolchain stable, pour Tauri)
 
-## React Compiler
+## Démarrage
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+pnpm tauri dev      # lance l'app desktop
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm tauri build    # génère le .app et le .dmg dans src-tauri/target/release/bundle
 ```
+
+## État (v1)
+
+- ✅ App Tauri lançable, icône Dock (tambour)
+- ✅ Tableau de bord, vue niveau (leçons groupées par volume), détail leçon
+- ✅ Suivi : statut, maîtrise, dates, notes, BPM atteint — persisté en local
+- ✅ Niveau 7 transcrit ; niveaux 8-23 en placeholder « à venir »
+- ⏳ À venir : transcription des autres niveaux, import/lecture des vidéos,
+  backing tracks & partitions (Annexes)
+
+Voir `docs/superpowers/specs/` et `docs/superpowers/plans/` pour le design et le
+plan d'implémentation.

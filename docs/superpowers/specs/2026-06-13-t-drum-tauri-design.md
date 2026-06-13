@@ -114,14 +114,20 @@ interface Niveau {
 ```ts
 type Statut = 'a-faire' | 'en-cours' | 'acquise'
 
+interface Rythme {            // un rythme travaillé, ajouté par l'utilisateur
+  id: string
+  libelle: string             // nommé librement (visible sur la partition)
+  bpm?: number                // tempo atteint au métronome
+  maitrise: number            // 0..5 selon barème (0 = non évalué)
+}
+
 interface LessonProgress {
   lessonId: string
-  statut: Statut             // défaut: 'a-faire'
-  maitrise: number           // 0..5 (étoiles)
-  dateTravail?: string       // ISO date
-  dateRevision?: string      // ISO date
-  notes?: string             // remarques perso
-  bpmActuel?: number         // tempo atteint au métronome
+  statut: Statut              // défaut: 'a-faire' — pilote la progression
+  dateTravail?: string        // ISO date
+  dateRevision?: string       // ISO date
+  notes?: string              // remarques perso
+  rythmes: Rythme[]           // liste éditable (vide par défaut)
 }
 
 interface ProgressFile {
@@ -130,8 +136,21 @@ interface ProgressFile {
 }
 ```
 
-Une leçon sans entrée dans `ProgressFile` est considérée « à faire » avec
-maîtrise 0.
+**Rythmes multiples par leçon.** Une leçon contient parfois plusieurs rythmes,
+chacun avec son tempo et sa maîtrise propres. Comme les rythmes ne sont
+identifiables que sur la partition, l'utilisateur les ajoute et les nomme
+lui-même ; une leçon sans rythme garde juste son statut.
+
+**Barème de maîtrise** (donne un sens concret aux 5 crans) :
+1 = déchiffré · 2 = joué lentement sans erreur · 3 = tempo cible atteint ·
+4 = fluide et régulier · 5 = par cœur / automatique.
+
+**Progression** (tableau de bord) : basée sur le statut de la leçon
+(acquise = 100 %, en cours = 50 %, à faire = 0 %). Les rythmes restent un détail
+interne à la leçon.
+
+Une leçon sans entrée dans `ProgressFile` est considérée « à faire », sans
+rythme.
 
 ## Écrans
 
