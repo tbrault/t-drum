@@ -1,3 +1,12 @@
+import type { SourcePartition, Zone } from "@/content/partitions";
+
+/** Exercice de la partition associé à un rythme : une zone d'une page. */
+export interface PartitionRythme {
+  source: SourcePartition;
+  page: number;
+  zone: Zone;
+}
+
 /**
  * Statut de travail d'une leçon. Il est déduit de la pratique (voir
  * `statutAuto`) ; seules les leçons sans tempo cible le choisissent à la main.
@@ -5,8 +14,8 @@
 export type Statut = "a-faire" | "en-cours" | "validee" | "maitrisee";
 
 /**
- * Un rythme travaillé dans une leçon. Les rythmes ne sont visibles que sur la
- * partition : l'utilisateur les ajoute et les nomme lui-même.
+ * Un rythme travaillé dans une leçon : un exercice de la partition, ajouté et
+ * nommé par l'utilisateur ou créé depuis une page.
  */
 export interface Rythme {
   id: string;
@@ -17,6 +26,8 @@ export interface Rythme {
   maitrise: number;
   /** Partie de la leçon où le rythme est rangé (absent = hors partie). */
   partieId?: string;
+  /** Exercice de la partition correspondant. */
+  partition?: PartitionRythme;
 }
 
 /**

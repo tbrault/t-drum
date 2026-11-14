@@ -23,6 +23,7 @@ import {
   GripVertical,
   ListPlus,
   Minus,
+  Music,
   Plus,
   Scissors,
   Trash2,
@@ -34,6 +35,7 @@ import { cn } from "@/lib/utils";
 import { progressStore } from "@/progress/store";
 import type { Partie, Rythme } from "@/progress/types";
 import { EditableTitle } from "./EditableTitle";
+import { ExercicePartition } from "./ExercicePartition";
 import { MaitriseStars } from "./MaitriseStars";
 
 interface Props {
@@ -42,6 +44,10 @@ interface Props {
   parties?: Partie[];
   /** Sert à signaler les rythmes qui ont atteint le tempo minimal. */
   tempoCible?: TempoCible;
+  /** Affiche l'exercice de la partition sous chaque rythme. */
+  afficherPartitions: boolean;
+  /** Ouvre la partition pour choisir l'exercice d'un rythme. */
+  onChoisirPartition: (rythme: Rythme) => void;
 }
 
 /**
@@ -86,6 +92,8 @@ export function RythmeList({
   rythmes,
   parties = [],
   tempoCible,
+  afficherPartitions,
+  onChoisirPartition,
 }: Props) {
   // Élément qu'on vient de créer : son champ de nom s'ouvre tout seul.
   const [nouveau, setNouveau] = useState<string | null>(null);
@@ -203,6 +211,8 @@ export function RythmeList({
                 onCouper={() =>
                   setNouveau(progressStore.splitPartie(lessonId, item.id))
                 }
+                afficherPartition={afficherPartitions}
+                onChoisirPartition={() => onChoisirPartition(item.rythme)}
               />
             );
           })}
@@ -248,6 +258,8 @@ function PartieEntete({
   const { partie, count, rang, total } = item;
   const update = (patch: Partial<Omit<Partie, "id">>) =>
     progressStore.updatePartie(lessonId, partie.id, patch);
+  // Supprimer une partie emporte ses rythmes : un second clic confirme.
+  const [confirmer, setConfirmer] = useState(false);
   // Ne se saisit pas, mais se décale pour laisser passer un rythme.
   const { setNodeRef, transform, transition } = useSortable({
     id: item.id,
@@ -314,15 +326,35 @@ function PartieEntete({
           <ArrowDown className="h-4 w-4" />
         </button>
       )}
-      <button
-        type="button"
-        aria-label="Supprimer la partie"
-        title="Supprimer la partie (ses rythmes sont gardés)"
-        onClick={() => progressStore.removePartie(lessonId, partie.id)}
-        className={cn(ICON_BTN, "hover:text-danger")}
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
+      {confirmer ? (
+        <button
+          type="button"
+          // biome-ignore lint/a11y/noAutofocus: le bouton n'apparaît qu'après le premier clic
+          autoFocus
+          onClick={() => progressStore.removePartie(lessonId, partie.id)}
+          onBlur={() => setConfirmer(false)}
+          className="flex h-8 shrink-0 items-center gap-1.5 rounded-md bg-danger/15 px-2.5 font-mono text-xs uppercase tracking-wider text-danger transition-colors hover:bg-danger/25"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          {count > 0
+            ? `Supprimer avec ${count} rythme${count > 1 ? "s" : ""}`
+            : "Supprimer"}
+        </button>
+      ) : (
+        <button
+          type="button"
+          aria-label="Supprimer la partie"
+          title="Supprimer la partie et ses rythmes"
+          onClick={() =>
+            count > 0
+              ? setConfirmer(true)
+              : progressStore.removePartie(lessonId, partie.id)
+          }
+          className={cn(ICON_BTN, "hover:text-danger")}
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }
@@ -365,6 +397,8 @@ function RythmeRow({
   tempoCible,
   saisir,
   onCouper,
+  afficherPartition,
+  onChoisirPartition,
 }: {
   lessonId: string;
   item: Extract<Item, { kind: "rythme" }>;
@@ -373,6 +407,8 @@ function RythmeRow({
   /** Vrai juste après la création : le nom est prêt à être saisi. */
   saisir: boolean;
   onCouper: () => void;
+  afficherPartition: boolean;
+  onChoisirPartition: () => void;
 }) {
   const { rythme, dansPartie, coupable } = item;
   const update = (patch: Partial<Omit<Rythme, "id">>) =>
@@ -471,7 +507,28 @@ function RythmeRow({
           </div>
 
           {/* Largeur fixe : les colonnes restent alignées d'une ligne à l'autre. */}
-          <div className="flex w-16 items-center justify-end">
+          <div className="flex w-24 items-center justify-end">
+            <button
+              type="button"
+              aria-label={
+                rythme.partition
+                  ? "Changer l'exercice de la partition"
+                  : "Associer un exercice de la partition"
+              }
+              title={
+                rythme.partition
+                  ? "Changer l'exercice de la partition"
+                  : "Associer un exercice de la partition"
+              }
+              onClick={onChoisirPartition}
+              className={cn(
+                ICON_BTN,
+                "hover:text-accent",
+                rythme.partition && "text-accent-dim",
+              )}
+            >
+              <Music className="h-4 w-4" />
+            </button>
             {coupable && (
               <button
                 type="button"
@@ -496,6 +553,16 @@ function RythmeRow({
             </button>
           </div>
         </div>
+
+        {afficherPartition && rythme.partition && (
+          // Pleine largeur : passe à la ligne sous les réglages du rythme.
+          <div className="basis-full pl-8">
+            <ExercicePartition
+              partition={rythme.partition}
+              onClick={onChoisirPartition}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

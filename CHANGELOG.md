@@ -5,6 +5,32 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.7.0 — 2026-11-14
+
+### Ajouté
+
+- Partitions : chaque leçon affiche les pages de la méthode indiquées par
+  ses consignes (carte « Partition » sous la vidéo). Un clic ouvre la page
+  en grand, avec les flèches pour passer d'une page à l'autre.
+- Exercices repérés automatiquement sur chaque page. « Créer les rythmes de
+  la page » ajoute d'un coup un rythme par exercice, rangés dans une partie
+  « Page N », chacun avec sa partition.
+- Partition dans la carte d'un rythme : l'exercice s'affiche sous ses
+  réglages. La note de musique d'un rythme ouvre la page pour lui associer un
+  exercice (clic sur un cadre, ou cadre tracé à la main si le découpage
+  automatique est faux). « Masquer les partitions » replie tous les
+  exercices.
+- Un binaire ou un solo est un seul exercice, même sur plusieurs lignes ou
+  sur deux pages : ses lignes sont réunies en un cadre (titres des pages lus
+  automatiquement), et le rythme créé porte son titre (« Binaire 9 »,
+  « Solo 4 »).
+- La liste s'intitule « Rythmes, binaires et solos ».
+
+### Modifié
+
+- Supprimer une partie supprime aussi ses rythmes, après un second clic de
+  confirmation qui indique combien de rythmes partent avec elle.
+
 ## 1.6.1 — 2026-11-14
 
 ### Corrigé

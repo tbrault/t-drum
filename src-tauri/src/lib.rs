@@ -14,6 +14,24 @@ fn videos_base() -> PathBuf {
         .unwrap_or_else(|| PathBuf::from("videos"))
 }
 
+/// Dossier des partitions (PDF et pages en images). Surchargé par la variable
+/// d'env `TDRUM_PARTITIONS_DIR`, sinon `partitions/` à la racine du projet.
+fn partitions_base() -> PathBuf {
+    if let Ok(dir) = std::env::var("TDRUM_PARTITIONS_DIR") {
+        return PathBuf::from(dir);
+    }
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .map(|p| p.join("partitions"))
+        .unwrap_or_else(|| PathBuf::from("partitions"))
+}
+
+/// Chemin absolu du dossier des partitions (pour `convertFileSrc` côté front).
+#[tauri::command]
+fn partitions_dir() -> String {
+    partitions_base().to_string_lossy().to_string()
+}
+
 /// Chemin absolu du dossier des vidéos (pour `convertFileSrc` côté front).
 #[tauri::command]
 fn videos_dir() -> String {
@@ -55,6 +73,7 @@ pub fn run() {
             load_progress,
             save_progress,
             videos_dir,
+            partitions_dir,
             file_exists
         ])
         .run(tauri::generate_context!())

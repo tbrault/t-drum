@@ -21,6 +21,20 @@ pnpm check         # lint Biome
 pnpm format        # lint + format Biome (--write)
 ```
 
+## Partitions
+
+Les PDF de la méthode (achetés, non redistribuables) sont dans `partitions/`,
+hors dépôt, comme les vidéos dans `videos/`. Après un changement de PDF :
+
+```bash
+swift scripts/partitions-en-images.swift   # PDF → partitions/pages/<source>/<page>.jpg
+swiftc -O scripts/detecter-exercices.swift -o /tmp/detecter && /tmp/detecter
+                                            # cadres des exercices → src/content/partitions-zones.json
+```
+
+Le numéro d'une image est le numéro imprimé sur la page (page N = (N+1)ᵉ du
+fichier dans les volumes). Seuls les cadres (des nombres) sont versionnés.
+
 ## Vérification
 
 Un hook Claude Code PreToolUse (config `.claude/settings.local.json`) lance avant commit :

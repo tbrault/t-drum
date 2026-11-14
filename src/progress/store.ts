@@ -1,6 +1,12 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useSyncExternalStore } from "react";
 import { getLesson } from "@/content";
+import {
+  memeZone,
+  nomsDePage,
+  type PagePartition,
+  type Zone,
+} from "@/content/partitions";
 import { todayISO } from "@/lib/dates";
 import { REVISION_INTERVALS } from "@/lib/revision";
 import { estAcquise, statutAuto } from "@/lib/statut";
@@ -9,6 +15,7 @@ import {
   type LessonProgress,
   normalizeProgress,
   type Partie,
+  type PartitionRythme,
   type ProgressFile,
   type Rythme,
   type Session,
@@ -191,6 +198,60 @@ class ProgressStore {
     });
   }
 
+  /** Associe un exercice de la partition à un rythme (ou le retire). */
+  setPartition(
+    lessonId: string,
+    rythmeId: string,
+    partition: PartitionRythme | undefined,
+  ): void {
+    this.updateRythme(lessonId, rythmeId, { partition });
+  }
+
+  /**
+   * Crée un rythme par exercice d'une page (un binaire ou un solo compte
+   * pour un seul exercice), rangés dans une nouvelle partie
+   * « Page N ». Les exercices déjà associés à un rythme de la leçon sont
+   * ignorés. Renvoie le nombre de rythmes créés.
+   */
+  ajouterRythmesDePage(
+    lessonId: string,
+    { source, page }: PagePartition,
+    zones: Zone[],
+  ): number {
+    const { rythmes, parties = [] } = this.get(lessonId);
+    const noms = nomsDePage({ source, page });
+    const libres = zones
+      .map((zone, i) => ({ zone, numero: i + 1, nom: noms[i] }))
+      .filter(
+        ({ zone }) =>
+          !rythmes.some(
+            (r) =>
+              r.partition?.source === source &&
+              r.partition.page === page &&
+              memeZone(r.partition.zone, zone),
+          ),
+      );
+    if (libres.length === 0) return 0;
+    const partie: Partie = {
+      id: newId(),
+      titre: source === "annexes" ? `Annexes p. ${page}` : `Page ${page}`,
+    };
+    const nouveaux: Rythme[] = libres.map(({ zone, numero, nom }) => ({
+      id: newId(),
+      // Un binaire ou un solo garde son titre ; sinon, son rang sur la page.
+      libelle: nom ?? `Exercice ${numero}`,
+      maitrise: 0,
+      partieId: partie.id,
+      partition: { source, page, zone },
+    }));
+    const prochaines = [...parties, partie];
+    this.set(lessonId, {
+      parties: prochaines,
+      rythmes: grouper([...rythmes, ...nouveaux], prochaines),
+    });
+    return nouveaux.length;
+  }
+
   /** Ajoute une partie en bas de la liste ; renvoie son identifiant. */
   addPartie(lessonId: string): string {
     const { rythmes, parties = [] } = this.get(lessonId);
@@ -258,20 +319,13 @@ class ProgressStore {
     this.set(lessonId, { parties });
   }
 
-  /**
-   * Supprime une partie sans toucher à ses rythmes : ils rejoignent la partie
-   * du dessus (ou sortent de toute partie si c'était la première).
-   */
+  /** Supprime une partie et tous ses rythmes. */
   removePartie(lessonId: string, partieId: string): void {
     const { rythmes, parties = [] } = this.get(lessonId);
-    const index = parties.findIndex((p) => p.id === partieId);
-    if (index < 0) return;
-    const dessus = parties[index - 1]?.id;
+    if (!parties.some((p) => p.id === partieId)) return;
     this.set(lessonId, {
       parties: parties.filter((p) => p.id !== partieId),
-      rythmes: rythmes.map((r) =>
-        r.partieId === partieId ? { ...r, partieId: dessus } : r,
-      ),
+      rythmes: rythmes.filter((r) => r.partieId !== partieId),
     });
   }
 

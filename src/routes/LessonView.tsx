@@ -1,19 +1,27 @@
-import { ChevronRight, Film, Music3 } from "lucide-react";
+import { ChevronRight, Eye, EyeOff, Film, Music3 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { EditableTitle } from "@/components/EditableTitle";
+import { PartitionViewer } from "@/components/PartitionViewer";
 import { RythmeList } from "@/components/RythmeList";
 import { SessionBar } from "@/components/SessionBar";
 import { StatutControl, StatutPill } from "@/components/StatutControl";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { VolumeTag } from "@/components/VolumeTag";
 import { getLesson, posterRelPath, videoRelPath } from "@/content";
+import {
+  libellePage,
+  type PagePartition,
+  pagesDeLecon,
+  ratioPage,
+} from "@/content/partitions";
 import type { Consignes, TempoCible } from "@/content/types";
+import { useUrlPage } from "@/lib/partitions";
 import { daysUntilDue, isDue } from "@/lib/revision";
 import { rythmesAuTempo } from "@/lib/statut";
 import { cn } from "@/lib/utils";
 import { progressStore, useLessonProgress } from "@/progress/store";
-import type { LessonProgress } from "@/progress/types";
+import type { LessonProgress, Rythme } from "@/progress/types";
 
 interface Props {
   lessonId: string;
@@ -41,7 +49,24 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
   const progress = useLessonProgress(lessonId);
   const [consignesOuvertes, setConsignesOuvertes] = useState(true);
   const colonne = useColonneCollante();
+  const [afficherPartitions, setAfficherPartitions] = usePreference(
+    "t-drum-afficher-partitions",
+    true,
+  );
+  // Partition ouverte en grand : une page, et éventuellement le rythme dont
+  // on choisit l'exercice.
+  const [visionneuse, setVisionneuse] = useState<{
+    depart: PagePartition;
+    rythmeId?: string;
+  } | null>(null);
   if (!lesson) return null;
+  const pagesLecon = pagesDeLecon(lesson);
+
+  /** Ouvre la partition pour choisir l'exercice d'un rythme. */
+  function choisirPartition(rythme: Rythme) {
+    const depart = rythme.partition ?? pagesLecon[0];
+    if (depart) setVisionneuse({ depart, rythmeId: rythme.id });
+  }
 
   const { consignes } = lesson;
   const nbRythmes = progress.rythmes.length;
@@ -104,18 +129,38 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
         <section className="order-2 md:order-1">
           <div className="mb-4 flex items-baseline justify-between gap-3">
             <h2 className="font-display text-xl font-extrabold text-ink">
-              Rythmes
+              Rythmes, binaires et solos
             </h2>
-            <span className="font-mono text-xs text-ink-muted tabular-nums">
-              {nbRythmes > 0 &&
-                `${nbRythmes} rythme${nbRythmes > 1 ? "s" : ""}`}
-            </span>
+            <div className="flex items-center gap-4">
+              {progress.rythmes.some((r) => r.partition) && (
+                <button
+                  type="button"
+                  onClick={() => setAfficherPartitions(!afficherPartitions)}
+                  className="inline-flex items-center gap-2 rounded-md px-2 py-1 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:bg-hover hover:text-accent"
+                >
+                  {afficherPartitions ? (
+                    <EyeOff className="h-3.5 w-3.5" />
+                  ) : (
+                    <Eye className="h-3.5 w-3.5" />
+                  )}
+                  {afficherPartitions
+                    ? "Masquer les partitions"
+                    : "Afficher les partitions"}
+                </button>
+              )}
+              <span className="font-mono text-xs text-ink-muted tabular-nums">
+                {nbRythmes > 0 &&
+                  `${nbRythmes} rythme${nbRythmes > 1 ? "s" : ""}`}
+              </span>
+            </div>
           </div>
           <RythmeList
             lessonId={lessonId}
             rythmes={progress.rythmes}
             parties={progress.parties}
             tempoCible={consignes.tempoCible}
+            afficherPartitions={afficherPartitions}
+            onChoisirPartition={choisirPartition}
           />
         </section>
 
@@ -135,6 +180,13 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
               videoRel={videoRelPath(lesson)}
               posterRel={posterRelPath(lesson)}
             />
+
+            {pagesLecon.length > 0 && (
+              <PagesPartition
+                pages={pagesLecon}
+                onOuvrir={(depart) => setVisionneuse({ depart })}
+              />
+            )}
 
             <div className="card rounded-xl">
               <button
@@ -189,8 +241,90 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
           </div>
         </aside>
       </div>
+
+      {visionneuse && (
+        <PartitionViewer
+          lessonId={lessonId}
+          rythmes={progress.rythmes}
+          depart={visionneuse.depart}
+          pagesLecon={pagesLecon}
+          choisirPour={progress.rythmes.find(
+            (r) => r.id === visionneuse.rythmeId,
+          )}
+          onClose={() => setVisionneuse(null)}
+        />
+      )}
     </div>
   );
+}
+
+/** Pages de partition de la leçon, en vignettes ; un clic ouvre la page. */
+function PagesPartition({
+  pages,
+  onOuvrir,
+}: {
+  pages: PagePartition[];
+  onOuvrir: (page: PagePartition) => void;
+}) {
+  const urlPage = useUrlPage();
+  return (
+    <div className="card rounded-xl px-5 py-4">
+      <div className={cn(LABEL, "mb-3")}>Partition</div>
+      <div className="grid grid-cols-3 gap-3">
+        {pages.map((p) => (
+          <button
+            key={`${p.source}-${p.page}`}
+            type="button"
+            onClick={() => onOuvrir(p)}
+            title={`Ouvrir ${libellePage(p)}`}
+            className="group text-left"
+          >
+            <div
+              style={{ aspectRatio: 1 / ratioPage(p.source) }}
+              className="overflow-hidden rounded-md bg-white transition-shadow group-hover:shadow-[0_0_0_2px_var(--color-accent)]"
+            >
+              {urlPage && (
+                <img
+                  src={urlPage(p)}
+                  alt=""
+                  loading="lazy"
+                  draggable={false}
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
+            <div className="mt-1.5 font-mono text-xs text-ink-muted group-hover:text-accent">
+              {p.source === "annexes" ? "Annexes" : `p. ${p.page}`}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Réglage d'affichage propre à cet ordinateur, gardé dans le navigateur. Il
+ * reprend sa valeur par défaut si le stockage est indisponible.
+ */
+function usePreference(cle: string, defaut: boolean) {
+  const [valeur, setValeur] = useState(() => {
+    try {
+      const v = localStorage.getItem(cle);
+      return v === null ? defaut : v === "1";
+    } catch {
+      return defaut;
+    }
+  });
+  const changer = (v: boolean) => {
+    setValeur(v);
+    try {
+      localStorage.setItem(cle, v ? "1" : "0");
+    } catch {
+      /* stockage indisponible : le réglage vaut pour la séance */
+    }
+  };
+  return [valeur, changer] as const;
 }
 
 /** Place de la colonne sous la barre de séance, et marge en bas de l'écran. */
