@@ -6,12 +6,14 @@ import { ProgressBar } from "./ProgressBar";
 
 interface Props {
   niveau: Niveau;
+  /** Titre à afficher (personnalisé ou d'origine). */
+  titre?: string;
   stats: Stats;
   onOpen: (numero: number) => void;
 }
 
 /** Carte de niveau dans le tableau de bord. */
-export function NiveauCard({ niveau, stats, onOpen }: Props) {
+export function NiveauCard({ niveau, titre, stats, onOpen }: Props) {
   const locked = niveau.placeholder;
   const complete = !locked && stats.pct === 100;
 
@@ -45,7 +47,7 @@ export function NiveauCard({ niveau, stats, onOpen }: Props) {
       </div>
 
       <p className="min-h-[2.5rem] text-sm leading-snug text-ink-muted">
-        {locked ? "Contenu à venir" : (niveau.titre ?? "—")}
+        {locked ? "Contenu à venir" : (titre ?? "—")}
       </p>
 
       {locked ? (

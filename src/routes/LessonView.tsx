@@ -1,5 +1,6 @@
 import { Film, Music3 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { EditableTitle } from "@/components/EditableTitle";
 import { PracticePanel } from "@/components/PracticePanel";
 import { RythmeList } from "@/components/RythmeList";
 import { StatutControl } from "@/components/StatutControl";
@@ -45,20 +46,28 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
         ]}
       />
 
-      <header className="mb-8 flex flex-wrap items-center gap-4">
-        <span className="font-display text-5xl font-extrabold leading-none text-ink">
-          {lesson.id}
-        </span>
-        <VolumeTag volume={lesson.volume} />
-        <span className="flex items-center gap-3 text-ink-faint">
-          {lesson.hasVideo && <Film className="h-4 w-4" />}
-          {lesson.hasBT && <Music3 className="h-4 w-4" />}
-        </span>
-        {isDue(progress) && (
-          <span className="rounded-full border border-amber/40 bg-amber/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-amber">
-            À réviser
+      <header className="mb-8">
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="font-display text-5xl font-extrabold leading-none text-ink">
+            {lesson.id}
           </span>
-        )}
+          <VolumeTag volume={lesson.volume} />
+          <span className="flex items-center gap-3 text-ink-faint">
+            {lesson.hasVideo && <Film className="h-4 w-4" />}
+            {lesson.hasBT && <Music3 className="h-4 w-4" />}
+          </span>
+          {isDue(progress) && (
+            <span className="rounded-full border border-amber/40 bg-amber/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-amber">
+              À réviser
+            </span>
+          )}
+        </div>
+        <EditableTitle
+          value={progress.titre ?? ""}
+          placeholder="Ajouter un titre"
+          onSave={(titre) => set({ titre: titre || undefined })}
+          className="mt-3 text-ink-muted"
+        />
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">

@@ -6,7 +6,7 @@ import { totalMinutes } from "@/lib/agenda";
 import { formatDuree } from "@/lib/dates";
 import { isDue } from "@/lib/revision";
 import { globalStats, niveauStats } from "@/lib/stats";
-import { useAllProgress, useSessions } from "@/progress/store";
+import { useAllProgress, useNiveauTitres, useSessions } from "@/progress/store";
 import { version } from "../../package.json";
 
 interface Props {
@@ -22,6 +22,7 @@ export function Dashboard({
 }: Props) {
   const progress = useAllProgress();
   const sessions = useSessions();
+  const titres = useNiveauTitres();
   const global = globalStats(niveaux, progress);
   const temps = totalMinutes(sessions);
 
@@ -107,6 +108,7 @@ export function Dashboard({
           <NiveauCard
             key={niveau.numero}
             niveau={niveau}
+            titre={titres[niveau.numero] ?? niveau.titre}
             stats={niveauStats(niveau, progress)}
             onOpen={onOpenNiveau}
           />

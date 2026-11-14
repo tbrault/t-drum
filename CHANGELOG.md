@@ -5,6 +5,15 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.2.0 — 2026-11-14
+
+### Ajouté
+
+- Titres modifiables : un clic sur le titre d'un niveau (page du niveau) ou
+  d'une leçon (page de la leçon) permet de le renommer. Le nouveau titre
+  apparaît aussi sur la carte du niveau à l'accueil et dans la liste des
+  leçons. Effacer le titre rétablit celui d'origine.
+
 ## 1.1.0 — 2026-11-14
 
 ### Ajouté

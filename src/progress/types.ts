@@ -36,6 +36,8 @@ export interface Session {
 export interface LessonProgress {
   lessonId: string;
   statut: Statut;
+  /** Titre personnalisé (sinon la liste affiche les objectifs de la leçon). */
+  titre?: string;
   /** Remarques personnelles. */
   notes?: string;
   /** Rythmes suivis dans la leçon (saisis par l'utilisateur). */
@@ -49,6 +51,8 @@ export interface ProgressFile {
   version: 1;
   lessons: Record<string, LessonProgress>;
   sessions: Session[];
+  /** Titres de niveau personnalisés, par numéro de niveau. */
+  niveauTitres?: Record<string, string>;
 }
 
 /** Progression par défaut d'une leçon non encore travaillée. */

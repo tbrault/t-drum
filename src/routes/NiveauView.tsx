@@ -1,4 +1,5 @@
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { EditableTitle } from "@/components/EditableTitle";
 import { LessonRow } from "@/components/LessonRow";
 import { ProgressBar } from "@/components/ProgressBar";
 import { getNiveau } from "@/content";
@@ -6,7 +7,11 @@ import type { Volume } from "@/content/types";
 import { VOLUME_COLOR } from "@/lib/meta";
 import { niveauStats } from "@/lib/stats";
 import { cn } from "@/lib/utils";
-import { useAllProgress } from "@/progress/store";
+import {
+  progressStore,
+  useAllProgress,
+  useNiveauTitres,
+} from "@/progress/store";
 
 interface Props {
   numero: number;
@@ -19,9 +24,11 @@ const VOLUMES: Volume[] = [2, 3, 4];
 export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
   const niveau = getNiveau(numero);
   const progress = useAllProgress();
+  const titres = useNiveauTitres();
 
   if (!niveau) return null;
   const stats = niveauStats(niveau, progress);
+  const titre = titres[niveau.numero] ?? niveau.titre ?? "";
 
   return (
     <div className="mx-auto max-w-4xl px-8 py-8">
@@ -33,7 +40,7 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
       />
 
       <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-sm uppercase tracking-widest text-ink-faint">
               Niveau
@@ -42,9 +49,18 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
               {niveau.numero}
             </span>
           </div>
-          {niveau.titre && (
-            <p className="mt-2 text-ink-muted">{niveau.titre}</p>
-          )}
+          {/* Revenir au titre d'origine (ou tout effacer) retire la personnalisation. */}
+          <EditableTitle
+            value={titre}
+            placeholder="Ajouter un titre"
+            onSave={(next) =>
+              progressStore.setNiveauTitre(
+                niveau.numero,
+                next === niveau.titre ? "" : next,
+              )
+            }
+            className="mt-2 text-ink-muted"
+          />
         </div>
         <div className="text-right">
           <div className="font-display text-3xl font-extrabold text-amber tabular-nums">

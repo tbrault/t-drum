@@ -31,6 +31,7 @@ function newId(): string {
 class ProgressStore {
   private data: Record<string, LessonProgress> = {};
   private sessions: Session[] = [];
+  private niveauTitres: Record<string, string> = {};
   /** Cache des progressions par défaut : référence stable pour useSyncExternalStore. */
   private defaults: Record<string, LessonProgress> = {};
   private listeners = new Set<() => void>();
@@ -54,6 +55,7 @@ class ProgressStore {
           this.data[id] = normalizeProgress(id, p);
         }
         this.sessions = parsed.sessions ?? [];
+        this.niveauTitres = parsed.niveauTitres ?? {};
       } catch (err) {
         console.error("Progression illisible, réinitialisée", err);
       }
@@ -113,6 +115,21 @@ class ProgressStore {
     const [moved] = rythmes.splice(from, 1);
     rythmes.splice(to, 0, moved);
     this.set(lessonId, { rythmes });
+  }
+
+  /** Titre personnalisé d'un niveau ; une chaîne vide rétablit le titre d'origine. */
+  setNiveauTitre(numero: number, titre: string): void {
+    const next = { ...this.niveauTitres };
+    if (titre) next[numero] = titre;
+    else delete next[numero];
+    this.niveauTitres = next;
+    this.emit();
+    this.scheduleSave();
+  }
+
+  /** Snapshot stable des titres de niveau personnalisés. */
+  allNiveauTitres(): Record<string, string> {
+    return this.niveauTitres;
   }
 
   /** Change le statut et gère le suivi de révision (init à l'acquisition). */
@@ -189,6 +206,7 @@ class ProgressStore {
       version: 1,
       lessons: this.data,
       sessions: this.sessions,
+      niveauTitres: this.niveauTitres,
     };
     const raw = JSON.stringify(file, null, 2);
     try {
@@ -223,6 +241,13 @@ export function useAllProgress(): Record<string, LessonProgress> {
 export function useSessions(): Session[] {
   return useSyncExternalStore(progressStore.subscribe, () =>
     progressStore.allSessions(),
+  );
+}
+
+/** Titres de niveau personnalisés, réactifs. */
+export function useNiveauTitres(): Record<string, string> {
+  return useSyncExternalStore(progressStore.subscribe, () =>
+    progressStore.allNiveauTitres(),
   );
 }
 

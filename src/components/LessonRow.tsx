@@ -29,7 +29,7 @@ export function LessonRow({ lesson, onOpen }: Props) {
       </span>
 
       <span className="min-w-0 flex-1 truncate text-sm text-ink">
-        {lesson.consignes.objectifs ?? "—"}
+        {progress.titre || (lesson.consignes.objectifs ?? "—")}
       </span>
 
       <span className="flex shrink-0 items-center gap-3 text-ink-faint">
