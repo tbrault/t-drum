@@ -6,7 +6,7 @@ import {
   Minimize,
   Play,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { assetUrl, fileExists } from "@/lib/videos";
 
 /** Bascule le plein écran de la fenêtre Tauri (sans planter hors Tauri). */
@@ -15,6 +15,15 @@ async function setWindowFullscreen(on: boolean) {
     await getCurrentWindow().setFullscreen(on);
   } catch {
     /* hors Tauri : ignore */
+  }
+}
+
+/** Vrai si la fenêtre de l'app est en plein écran (faux hors Tauri). */
+async function isWindowFullscreen(): Promise<boolean> {
+  try {
+    return await getCurrentWindow().isFullscreen();
+  } catch {
+    return false;
   }
 }
 
@@ -37,11 +46,20 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
   const [posterSrc, setPosterSrc] = useState<string | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
 
-  function toggleFullscreen() {
-    setFullscreen((on) => {
-      setWindowFullscreen(!on);
-      return !on;
-    });
+  // La fenêtre était-elle déjà en plein écran quand la vidéo y est passée ?
+  // Si oui, on la laisse comme ça en sortant : la vidéo ne rend à la fenêtre
+  // que ce qu'elle lui a pris.
+  const windowWasFullscreen = useRef(false);
+
+  async function toggleFullscreen() {
+    if (fullscreen) {
+      setFullscreen(false);
+      if (!windowWasFullscreen.current) setWindowFullscreen(false);
+      return;
+    }
+    windowWasFullscreen.current = await isWindowFullscreen();
+    setFullscreen(true);
+    if (!windowWasFullscreen.current) setWindowFullscreen(true);
   }
 
   // Échap quitte le plein écran.
@@ -50,7 +68,7 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setFullscreen(false);
-        setWindowFullscreen(false);
+        if (!windowWasFullscreen.current) setWindowFullscreen(false);
       }
     };
     window.addEventListener("keydown", onKey);
