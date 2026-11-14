@@ -7,6 +7,7 @@ import { formatDuree } from "@/lib/dates";
 import { isDue } from "@/lib/revision";
 import { globalStats, niveauStats } from "@/lib/stats";
 import { useAllProgress, useSessions } from "@/progress/store";
+import { version } from "../../package.json";
 
 interface Props {
   onOpenNiveau: (numero: number) => void;
@@ -111,6 +112,10 @@ export function Dashboard({
           />
         ))}
       </div>
+
+      <footer className="mt-12 text-center font-mono text-[11px] tracking-widest text-ink-faint">
+        T-Drum v{version}
+      </footer>
     </div>
   );
 }
