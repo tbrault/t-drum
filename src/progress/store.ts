@@ -124,13 +124,13 @@ class ProgressStore {
    * Ajoute un rythme à la fin d'une partie (par défaut la dernière, s'il y en
    * a). La partie est dépliée pour que le nouveau rythme soit visible.
    */
-  addRythme(lessonId: string, partieId?: string): void {
+  addRythme(lessonId: string, partieId?: string): string {
     const { rythmes, parties = [] } = this.get(lessonId);
     const cible = partieId ?? parties[parties.length - 1]?.id;
     const rythme: Rythme = { id: newId(), libelle: "", maitrise: 0 };
     if (!cible) {
       this.set(lessonId, { rythmes: [...rythmes, rythme] });
-      return;
+      return rythme.id;
     }
     this.set(lessonId, {
       rythmes: grouper([...rythmes, { ...rythme, partieId: cible }], parties),
@@ -138,6 +138,7 @@ class ProgressStore {
         p.id === cible ? { ...p, repliee: false } : p,
       ),
     });
+    return rythme.id;
   }
 
   updateRythme(
@@ -190,8 +191,8 @@ class ProgressStore {
     });
   }
 
-  /** Ajoute une partie en bas de la liste. */
-  addPartie(lessonId: string): void {
+  /** Ajoute une partie en bas de la liste ; renvoie son identifiant. */
+  addPartie(lessonId: string): string {
     const { rythmes, parties = [] } = this.get(lessonId);
     const partie: Partie = { id: newId(), titre: "" };
     this.set(lessonId, {
@@ -202,6 +203,7 @@ class ProgressStore {
           ? rythmes.map((r) => ({ ...r, partieId: partie.id }))
           : rythmes,
     });
+    return partie.id;
   }
 
   /** Monte (-1) ou descend (+1) une partie, avec tous ses rythmes. */
@@ -219,10 +221,10 @@ class ProgressStore {
    * Coupe la liste à un rythme : lui et les suivants de son groupe passent
    * dans une nouvelle partie, placée juste après celle d'origine.
    */
-  splitPartie(lessonId: string, rythmeId: string): void {
+  splitPartie(lessonId: string, rythmeId: string): string | null {
     const { rythmes, parties = [] } = this.get(lessonId);
     const index = rythmes.findIndex((r) => r.id === rythmeId);
-    if (index < 0) return;
+    if (index < 0) return null;
     const origine = rythmes[index].partieId;
     const partie: Partie = { id: newId(), titre: "" };
     const position = parties.findIndex((p) => p.id === origine) + 1;
@@ -242,6 +244,7 @@ class ProgressStore {
         next,
       ),
     });
+    return partie.id;
   }
 
   updatePartie(

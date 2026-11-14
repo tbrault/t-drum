@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Calendar } from "@/components/Calendar";
-import { allLessons } from "@/content";
+import { allLessons, getLesson } from "@/content";
 import { minutesByDay, sessionsForDay } from "@/lib/agenda";
 import { formatDuree, formatLong, formatMonth, todayISO } from "@/lib/dates";
 import { nextDueISO } from "@/lib/revision";
@@ -47,6 +47,9 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
     setMonth0(d.getMonth());
   }
 
+  /** Titre affiché d'une leçon : le personnalisé, sinon celui d'origine. */
+  const titreDe = (id: string) => progress[id]?.titre || getLesson(id)?.titre;
+
   const daySessions = selected ? sessionsForDay(sessions, selected) : [];
   const dayDue = selected ? (dueByDay[selected] ?? []) : [];
 
@@ -83,7 +86,7 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
             selected={selected}
             onSelect={setSelected}
           />
-          <p className="mt-4 flex items-center gap-2 font-mono text-[11px] text-ink-faint">
+          <p className="mt-4 flex items-center gap-2 font-mono text-xs text-ink-faint">
             <span className="h-1.5 w-1.5 rounded-full bg-done" /> jour
             d'échéance de révision
           </p>
@@ -100,7 +103,7 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
 
           {daySessions.length > 0 && (
             <div className="mb-5">
-              <div className="mb-2 font-mono text-[11px] uppercase tracking-wider text-amber-dim">
+              <div className="mb-2 font-mono text-xs uppercase tracking-wider text-accent-dim">
                 Pratique
               </div>
               <ul className="space-y-1.5">
@@ -109,12 +112,17 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
                     <button
                       type="button"
                       onClick={() => onOpenLesson(s.lessonId)}
-                      className="flex w-full items-center justify-between rounded-lg border border-line bg-panel px-3 py-2 text-left transition-colors hover:border-amber/50"
+                      className="card flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left transition-colors hover-row"
                     >
-                      <span className="font-mono text-sm text-ink">
-                        {s.lessonId}
+                      <span className="flex min-w-0 items-baseline gap-2">
+                        <span className="shrink-0 font-mono text-sm text-ink">
+                          {s.lessonId}
+                        </span>
+                        <span className="truncate text-sm text-ink-muted">
+                          {titreDe(s.lessonId)}
+                        </span>
                       </span>
-                      <span className="font-mono text-xs text-ink-muted tabular-nums">
+                      <span className="shrink-0 font-mono text-xs text-ink-muted tabular-nums">
                         {formatDuree(s.minutes)}
                       </span>
                     </button>
@@ -126,7 +134,7 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
 
           {dayDue.length > 0 && (
             <div>
-              <div className="mb-2 font-mono text-[11px] uppercase tracking-wider text-done">
+              <div className="mb-2 font-mono text-xs uppercase tracking-wider text-done">
                 À réviser
               </div>
               <ul className="space-y-1.5">
@@ -135,9 +143,14 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
                     <button
                       type="button"
                       onClick={() => onOpenLesson(id)}
-                      className="w-full rounded-lg border border-done/30 bg-done/5 px-3 py-2 text-left font-mono text-sm text-ink transition-colors hover:border-done/60"
+                      className="flex w-full items-baseline gap-2 rounded-lg bg-done-soft px-3 py-2 text-left transition-[filter] hover:brightness-125"
                     >
-                      {id}
+                      <span className="shrink-0 font-mono text-sm text-ink">
+                        {id}
+                      </span>
+                      <span className="truncate text-sm text-ink-muted">
+                        {titreDe(id)}
+                      </span>
                     </button>
                   </li>
                 ))}
@@ -161,7 +174,7 @@ function NavBtn({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-ink-muted transition-colors hover:border-amber/60 hover:text-amber"
+      className="card flex h-9 w-9 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-hover hover:text-accent"
     >
       {children}
     </button>

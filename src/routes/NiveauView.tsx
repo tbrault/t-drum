@@ -62,10 +62,10 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
           />
         </div>
         <div className="text-right">
-          <div className="font-display text-3xl font-extrabold text-amber tabular-nums">
+          <div className="font-display text-3xl font-extrabold text-accent tabular-nums">
             {stats.pct}%
           </div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-ink-faint">
+          <div className="font-mono text-xs uppercase tracking-widest text-ink-faint">
             {stats.acquises}/{stats.total} acquises
           </div>
         </div>
@@ -94,7 +94,7 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
                 </span>
                 <div className="h-px flex-1 bg-line-soft" />
               </div>
-              <div className="overflow-hidden rounded-xl border border-line bg-panel">
+              <div className="card overflow-hidden rounded-xl">
                 {lessons.map((lesson) => (
                   <LessonRow
                     key={lesson.id}

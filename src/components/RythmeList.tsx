@@ -27,6 +27,7 @@ import {
   Scissors,
   Trash2,
 } from "lucide-react";
+import { useState } from "react";
 import type { TempoCible } from "@/content/types";
 import { MAITRISE_NIVEAUX, STATUTS } from "@/lib/meta";
 import { cn } from "@/lib/utils";
@@ -70,9 +71,9 @@ type Item =
 const verticalOnly: Modifier = ({ transform }) => ({ ...transform, x: 0 });
 
 const ICON_BTN =
-  "flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-ink-faint transition-colors";
+  "flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-ink-faint transition-colors hover:bg-raised";
 const ADD_BTN =
-  "inline-flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink-faint transition-colors hover:border-amber/60 hover:text-amber";
+  "inline-flex items-center gap-2 rounded-lg bg-raised px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:bg-line hover:text-accent";
 
 /**
  * Liste éditable des rythmes d'une leçon (libellé + BPM + maîtrise), rangés
@@ -86,6 +87,11 @@ export function RythmeList({
   parties = [],
   tempoCible,
 }: Props) {
+  // Élément qu'on vient de créer : son champ de nom s'ouvre tout seul.
+  const [nouveau, setNouveau] = useState<string | null>(null);
+  const ajouterRythme = (partieId?: string) =>
+    setNouveau(progressStore.addRythme(lessonId, partieId));
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -173,12 +179,17 @@ export function RythmeList({
                   lessonId={lessonId}
                   item={item}
                   premier={i === 0}
+                  saisir={item.id === nouveau}
                 />
               );
             }
             if (item.kind === "pied") {
               return (
-                <PartiePied key={item.id} lessonId={lessonId} item={item} />
+                <PartiePied
+                  key={item.id}
+                  item={item}
+                  onAjouter={() => ajouterRythme(item.partie.id)}
+                />
               );
             }
             return (
@@ -188,6 +199,10 @@ export function RythmeList({
                 item={item}
                 premier={i === 0}
                 tempoCible={tempoCible}
+                saisir={item.id === nouveau}
+                onCouper={() =>
+                  setNouveau(progressStore.splitPartie(lessonId, item.id))
+                }
               />
             );
           })}
@@ -199,7 +214,7 @@ export function RythmeList({
         {parties.length === 0 && (
           <button
             type="button"
-            onClick={() => progressStore.addRythme(lessonId)}
+            onClick={() => ajouterRythme()}
             className={ADD_BTN}
           >
             <Plus className="h-3.5 w-3.5" /> Ajouter un rythme
@@ -207,7 +222,7 @@ export function RythmeList({
         )}
         <button
           type="button"
-          onClick={() => progressStore.addPartie(lessonId)}
+          onClick={() => setNouveau(progressStore.addPartie(lessonId))}
           className={ADD_BTN}
         >
           <ListPlus className="h-3.5 w-3.5" /> Ajouter une partie
@@ -222,10 +237,13 @@ function PartieEntete({
   lessonId,
   item,
   premier,
+  saisir,
 }: {
   lessonId: string;
   item: Extract<Item, { kind: "entete" }>;
   premier: boolean;
+  /** Vrai juste après la création : le nom est prêt à être saisi. */
+  saisir: boolean;
 }) {
   const { partie, count, rang, total } = item;
   const update = (patch: Partial<Omit<Partie, "id">>) =>
@@ -241,7 +259,7 @@ function PartieEntete({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        "flex items-center gap-2 border border-line bg-raised px-3 py-2.5",
+        "flex items-center gap-2 bg-raised px-3 py-2.5",
         partie.repliee ? "rounded-xl" : "rounded-t-xl",
         !premier && "mt-5",
       )}
@@ -251,7 +269,7 @@ function PartieEntete({
         aria-label={partie.repliee ? "Déplier la partie" : "Replier la partie"}
         aria-expanded={!partie.repliee}
         onClick={() => update({ repliee: !partie.repliee })}
-        className={cn(ICON_BTN, "hover:text-amber")}
+        className={cn(ICON_BTN, "hover:text-accent")}
       >
         <ChevronRight
           className={cn(
@@ -264,8 +282,9 @@ function PartieEntete({
       <div className="min-w-0 flex-1">
         <EditableTitle
           value={partie.titre}
+          autoEdit={saisir}
           onSave={(titre) => update({ titre })}
-          className="font-display text-base font-bold text-ink [&>span]:truncate"
+          className="font-display text-base font-semibold text-ink [&>span]:truncate"
         />
       </div>
 
@@ -279,7 +298,7 @@ function PartieEntete({
           aria-label="Monter la partie"
           title="Monter la partie"
           onClick={() => progressStore.movePartie(lessonId, partie.id, -1)}
-          className={cn(ICON_BTN, "hover:text-amber")}
+          className={cn(ICON_BTN, "hover:text-accent")}
         >
           <ArrowUp className="h-4 w-4" />
         </button>
@@ -290,7 +309,7 @@ function PartieEntete({
           aria-label="Descendre la partie"
           title="Descendre la partie"
           onClick={() => progressStore.movePartie(lessonId, partie.id, 1)}
-          className={cn(ICON_BTN, "hover:text-amber")}
+          className={cn(ICON_BTN, "hover:text-accent")}
         >
           <ArrowDown className="h-4 w-4" />
         </button>
@@ -300,7 +319,7 @@ function PartieEntete({
         aria-label="Supprimer la partie"
         title="Supprimer la partie (ses rythmes sont gardés)"
         onClick={() => progressStore.removePartie(lessonId, partie.id)}
-        className={cn(ICON_BTN, "hover:text-vol4")}
+        className={cn(ICON_BTN, "hover:text-danger")}
       >
         <Trash2 className="h-4 w-4" />
       </button>
@@ -310,11 +329,11 @@ function PartieEntete({
 
 /** Pied d'une carte de partie : ferme la carte et ajoute un rythme dedans. */
 function PartiePied({
-  lessonId,
   item,
+  onAjouter,
 }: {
-  lessonId: string;
   item: Extract<Item, { kind: "pied" }>;
+  onAjouter: () => void;
 }) {
   const { setNodeRef, transform, transition } = useSortable({
     id: item.id,
@@ -325,13 +344,9 @@ function PartiePied({
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
-      className="flex flex-wrap items-center gap-3 rounded-b-xl border-x border-b border-line bg-panel px-4 py-3"
+      className="flex flex-wrap items-center gap-3 rounded-b-xl bg-panel px-4 py-3"
     >
-      <button
-        type="button"
-        onClick={() => progressStore.addRythme(lessonId, item.partie.id)}
-        className={ADD_BTN}
-      >
+      <button type="button" onClick={onAjouter} className={ADD_BTN}>
         <Plus className="h-3.5 w-3.5" /> Ajouter un rythme
       </button>
       {item.vide && (
@@ -348,11 +363,16 @@ function RythmeRow({
   item,
   premier,
   tempoCible,
+  saisir,
+  onCouper,
 }: {
   lessonId: string;
   item: Extract<Item, { kind: "rythme" }>;
   premier: boolean;
   tempoCible?: TempoCible;
+  /** Vrai juste après la création : le nom est prêt à être saisi. */
+  saisir: boolean;
+  onCouper: () => void;
 }) {
   const { rythme, dansPartie, coupable } = item;
   const update = (patch: Partial<Omit<Rythme, "id">>) =>
@@ -375,17 +395,15 @@ function RythmeRow({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        dansPartie
-          ? "border-x border-line bg-panel px-4 pt-3"
-          : !premier && "pt-3",
+        dansPartie ? "bg-panel px-4 pt-3" : !premier && "pt-3",
         isDragging && "relative z-10",
       )}
     >
       <div
         className={cn(
-          "group/rythme flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border px-3 py-3.5",
-          dansPartie ? "border-line-soft bg-base" : "border-line bg-panel",
-          isDragging && "border-amber/60 shadow-xl",
+          "group/rythme flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg px-3 py-3.5",
+          dansPartie ? "bg-ground" : "card",
+          isDragging && "outline-1 outline-accent/70",
         )}
       >
         <div className="flex min-w-[11rem] flex-1 items-center gap-2">
@@ -395,19 +413,22 @@ function RythmeRow({
             aria-label="Déplacer ce rythme"
             className={cn(
               ICON_BTN,
-              "w-6 touch-none hover:text-amber",
-              isDragging ? "cursor-grabbing text-amber" : "cursor-grab",
+              "w-6 touch-none hover:text-accent",
+              isDragging ? "cursor-grabbing text-accent" : "cursor-grab",
             )}
             {...attributes}
             {...listeners}
           >
             <GripVertical className="h-4 w-4" />
           </button>
+          {/* Le champ garde un fond visible : on voit où écrire, même vide. */}
           <input
+            // biome-ignore lint/a11y/noAutofocus: seulement sur le rythme qu'on vient d'ajouter
+            autoFocus={saisir}
             value={rythme.libelle}
             onChange={(e) => update({ libelle: e.target.value })}
             aria-label="Nom du rythme"
-            className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-2 py-1.5 font-medium text-ink hover:border-line focus:border-amber/60 focus:bg-panel focus:outline-none"
+            className="min-w-0 flex-1 rounded-md border border-transparent bg-raised/70 px-2.5 py-1.5 font-semibold text-ink hover:bg-raised focus:border-accent/60 focus:bg-raised focus:outline-none"
           />
         </div>
 
@@ -456,10 +477,10 @@ function RythmeRow({
                 type="button"
                 aria-label="Couper ici en une nouvelle partie"
                 title="Couper ici : ce rythme et les suivants passent dans une nouvelle partie"
-                onClick={() => progressStore.splitPartie(lessonId, rythme.id)}
+                onClick={onCouper}
                 className={cn(
                   ICON_BTN,
-                  "opacity-0 hover:text-amber focus-visible:opacity-100 group-hover/rythme:opacity-100",
+                  "opacity-0 hover:text-accent focus-visible:opacity-100 group-hover/rythme:opacity-100",
                 )}
               >
                 <Scissors className="h-4 w-4" />
@@ -469,7 +490,7 @@ function RythmeRow({
               type="button"
               aria-label="Supprimer ce rythme"
               onClick={() => progressStore.removeRythme(lessonId, rythme.id)}
-              className={cn(ICON_BTN, "hover:text-vol4")}
+              className={cn(ICON_BTN, "hover:text-danger")}
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -513,7 +534,7 @@ function StepBtn({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised text-ink-muted transition-colors hover:border-amber/60 hover:text-amber active:scale-95"
+      className="flex h-8 w-8 items-center justify-center rounded-md bg-raised text-ink-muted transition-colors hover:bg-line hover:text-accent active:scale-95"
     >
       {children}
     </button>

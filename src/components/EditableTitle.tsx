@@ -7,6 +7,8 @@ interface Props {
   value: string;
   /** Reçoit le nouveau titre sans espaces autour ("" = effacé). */
   onSave: (titre: string) => void;
+  /** Ouvre directement le champ de saisie (élément qu'on vient de créer). */
+  autoEdit?: boolean;
   className?: string;
 }
 
@@ -14,9 +16,14 @@ interface Props {
  * Titre modifiable sur place : un clic ouvre un champ de saisie, Entrée (ou
  * un clic ailleurs) valide, Échap annule.
  */
-export function EditableTitle({ value, onSave, className }: Props) {
+export function EditableTitle({
+  value,
+  onSave,
+  autoEdit = false,
+  className,
+}: Props) {
   /** `null` = lecture ; sinon le texte en cours de saisie. */
-  const [draft, setDraft] = useState<string | null>(null);
+  const [draft, setDraft] = useState<string | null>(autoEdit ? value : null);
   // Échap démonte le champ, ce qui peut déclencher un blur : ne pas valider.
   const cancelled = useRef(false);
 
@@ -34,8 +41,13 @@ export function EditableTitle({ value, onSave, className }: Props) {
           className,
         )}
       >
-        {value && <span className="min-w-0">{value}</span>}
-        <Pencil className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-colors group-hover/title:text-amber" />
+        {value ? (
+          <span className="min-w-0">{value}</span>
+        ) : (
+          // Pas de titre : on montre l'emplacement vide, comme un champ.
+          <span className="well h-7 w-40 rounded-md" />
+        )}
+        <Pencil className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-colors group-hover/title:text-accent" />
       </button>
     );
   }
@@ -64,7 +76,7 @@ export function EditableTitle({ value, onSave, className }: Props) {
         }
       }}
       className={cn(
-        "block w-full rounded-md border border-amber/60 bg-panel px-2.5 py-1 text-ink focus:outline-none",
+        "block w-full rounded-md border border-accent/60 bg-panel px-2.5 py-1 text-ink focus:outline-none",
         className,
       )}
     />

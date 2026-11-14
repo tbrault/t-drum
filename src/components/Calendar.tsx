@@ -38,7 +38,7 @@ export function Calendar({
         {JOURS.map((j) => (
           <div
             key={j}
-            className="text-center font-mono text-[10px] uppercase tracking-wider text-ink-faint"
+            className="text-center font-mono text-xs uppercase tracking-wider text-ink-faint"
           >
             {j}
           </div>
@@ -62,25 +62,31 @@ export function Calendar({
               key={iso}
               onClick={() => onSelect(iso)}
               className={cn(
-                "relative flex aspect-square items-center justify-center rounded-lg border text-sm transition-colors",
+                "relative flex aspect-square items-center justify-center rounded-lg text-sm transition-colors",
+                min === 0 && "bg-panel hover:bg-hover",
+                // Seuls le jour choisi et aujourd'hui portent un contour.
                 isSel
-                  ? "border-amber"
-                  : isToday
-                    ? "border-amber/40"
-                    : "border-line-soft",
-                min === 0 && "hover:border-line",
+                  ? "ring-2 ring-accent"
+                  : isToday && "ring-1 ring-accent/50",
               )}
               style={
                 min > 0
-                  ? { backgroundColor: `oklch(0.79 0.158 67 / ${intensity})` }
+                  ? {
+                      backgroundColor: `color-mix(in oklab, var(--color-accent) ${Math.round(intensity * 100)}%, transparent)`,
+                    }
                   : undefined
               }
             >
               <span
                 className={cn(
                   "tabular-nums",
-                  min > 0 ? "font-medium text-base" : "text-ink-muted",
-                  isToday && min === 0 && "text-amber",
+                  min > 0
+                    ? cn(
+                        "font-semibold",
+                        intensity > 0.5 ? "text-ground" : "text-ink",
+                      )
+                    : "text-ink-muted",
+                  isToday && min === 0 && "text-accent",
                 )}
               >
                 {day}

@@ -12,9 +12,9 @@ interface Props {
 }
 
 const LABEL =
-  "font-mono text-[10px] font-semibold uppercase tracking-widest text-ink-faint";
+  "font-mono text-xs font-semibold uppercase tracking-widest text-ink-faint";
 const LINK =
-  "inline-flex items-center gap-2 rounded-md px-2 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors hover:text-amber";
+  "inline-flex items-center gap-2 rounded-md px-2 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors hover:bg-hover hover:text-accent";
 
 /**
  * Barre de séance d'une leçon, collée en haut de l'écran : chrono, temps
@@ -34,12 +34,10 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
   return (
     // La marge haute laisse la place aux boutons de la fenêtre ; elle est
     // floutée pour que la liste ne se lise pas au-dessus de la barre.
-    <div className="sticky top-0 z-30 -mt-6 mb-8 bg-base/60 pt-8 backdrop-blur-md">
-      <div className="rounded-xl border border-line bg-panel shadow-[0_14px_30px_-14px_rgb(0_0_0/0.8)]">
+    <div className="sticky top-0 z-30 -mt-6 mb-8 bg-ground/60 pt-8 backdrop-blur-md">
+      <div className="rounded-xl bg-panel shadow-[inset_0_1px_0_rgb(255_240_220/0.06),0_14px_30px_-14px_rgb(0_0_0/0.85)]">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-3">
           <Timer lessonId={lessonId} />
-
-          <div className="h-9 w-px bg-line" />
 
           <div>
             <div className={LABEL}>Temps cumulé</div>
@@ -55,7 +53,7 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
               onClick={() => toggle("ajout")}
               className={cn(
                 LINK,
-                ouvert === "ajout" ? "text-amber" : "text-ink-muted",
+                ouvert === "ajout" ? "text-accent" : "text-ink-muted",
               )}
             >
               <Plus className="h-3.5 w-3.5" /> Ajouter du temps
@@ -67,7 +65,7 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
                 onClick={() => toggle("historique")}
                 className={cn(
                   LINK,
-                  ouvert === "historique" ? "text-amber" : "text-ink-muted",
+                  ouvert === "historique" ? "text-accent" : "text-ink-muted",
                 )}
               >
                 <History className="h-3.5 w-3.5" /> Historique ({list.length})
@@ -78,9 +76,9 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
           {tempoCible && (
             <div className="ml-auto text-right">
               <div className={LABEL}>Tempo cible</div>
-              <div className="font-mono text-lg text-amber tabular-nums">
+              <div className="font-mono text-lg text-accent tabular-nums">
                 {tempoCible.min}–{tempoCible.max}
-                <span className="ml-1.5 text-xs text-amber-dim">BPM</span>
+                <span className="ml-1.5 text-xs text-accent-dim">BPM</span>
               </div>
             </div>
           )}
@@ -97,7 +95,7 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
             {list.map((s) => (
               <li
                 key={s.id}
-                className="flex items-center justify-between rounded-md border border-line-soft bg-base px-3 py-1.5 text-sm"
+                className="flex items-center justify-between rounded-md bg-ground px-3 py-1.5 text-sm"
               >
                 <span className="text-ink-muted">{formatLong(s.date)}</span>
                 <span className="flex items-center gap-3">
@@ -108,7 +106,7 @@ export function SessionBar({ lessonId, tempoCible }: Props) {
                     type="button"
                     aria-label="Supprimer la session"
                     onClick={() => progressStore.deleteSession(s.id)}
-                    className="text-ink-faint transition-colors hover:text-vol4"
+                    className="text-ink-faint transition-colors hover:text-danger"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -161,12 +159,8 @@ function Timer({ lessonId }: { lessonId: string }) {
       <button
         type="button"
         onClick={toggle}
-        className={cn(
-          "flex items-center gap-2 rounded-lg px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors",
-          running
-            ? "bg-amber text-base hover:bg-amber-bright"
-            : "border border-amber/60 text-amber hover:bg-amber/10",
-        )}
+        // Action principale de la page : le seul bouton plein.
+        className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-ground transition-colors hover:bg-accent-bright"
       >
         {running ? (
           <>
@@ -182,7 +176,7 @@ function Timer({ lessonId }: { lessonId: string }) {
       <span
         className={cn(
           "font-mono text-2xl tabular-nums",
-          running ? "text-amber" : "text-ink",
+          running ? "text-accent" : "text-ink",
         )}
       >
         {mm}:{ss}
@@ -192,7 +186,7 @@ function Timer({ lessonId }: { lessonId: string }) {
           type="button"
           aria-label="Réinitialiser le chrono"
           onClick={reset}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-ink-faint transition-colors hover:text-ink"
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-raised text-ink-muted transition-colors hover:bg-line hover:text-ink"
         >
           <RotateCcw className="h-4 w-4" />
         </button>
@@ -226,7 +220,7 @@ function ManualAdd({
         aria-label="Jour de la séance"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        className="rounded-lg border border-line bg-base px-3 py-2 font-mono text-xs text-ink focus:border-amber/60 focus:outline-none"
+        className="well rounded-lg border border-transparent px-3 py-2 font-mono text-xs text-ink focus:border-accent/60 focus:outline-none"
       />
       <input
         type="number"
@@ -235,13 +229,13 @@ function ManualAdd({
         value={minutes}
         onChange={(e) => setMinutes(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && add()}
-        className="w-24 rounded-lg border border-line bg-base px-3 py-2 font-mono text-sm text-ink focus:border-amber/60 focus:outline-none"
+        className="well w-24 rounded-lg border border-transparent px-3 py-2 font-mono text-sm text-ink focus:border-accent/60 focus:outline-none"
       />
       <span className="font-mono text-xs text-ink-faint">min</span>
       <button
         type="button"
         onClick={add}
-        className="rounded-lg bg-amber px-4 py-2 font-mono text-xs uppercase tracking-wider text-base"
+        className="rounded-lg bg-accent px-4 py-2 font-mono text-xs uppercase tracking-wider text-ground"
       >
         Ajouter
       </button>

@@ -13,12 +13,12 @@ export function MaitriseStars({ value, onChange, size = "sm" }: Props) {
 
   const padClass = (filled: boolean) =>
     cn(
-      "rounded-[3px] border transition-all duration-150",
+      "rounded-[3px] transition-all duration-150",
       pad,
       filled
-        ? "border-amber bg-amber shadow-[0_0_10px_-2px_var(--color-amber)]"
-        : "border-ink-faint/60 bg-transparent",
-      interactive && "cursor-pointer hover:border-amber-bright active:scale-90",
+        ? "bg-accent shadow-[0_0_10px_-2px_var(--color-accent)]"
+        : "bg-line",
+      interactive && "cursor-pointer hover:bg-accent-bright active:scale-90",
     );
 
   return (

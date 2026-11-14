@@ -2,8 +2,8 @@
 @import "tw-animate-css";
 
 /*
-  T-Drum — Console de studio / boîte à rythmes
-  Fond charbon chaud, accent ambre TR-808, affichages monospace.
+  T-Drum — console de studio
+  Fond charbon chaud, accent ambre, affichages monospace.
   App dark-only : les tokens sont définis directement sur :root.
 */
 
@@ -14,30 +14,39 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 
   /*
-    Surfaces (charbon chaud, légèrement teinté). Les trois niveaux sont assez
-    écartés pour qu'un panneau, une carte et un intertitre se distinguent.
+    Surfaces (charbon chaud, légèrement teinté). Chaque niveau est assez
+    écarté du précédent pour qu'une carte se détache sans bordure.
   */
-  --color-base: oklch(0.15 0.006 70);
+  --color-ground: oklch(0.15 0.006 70);
   --color-panel: oklch(0.215 0.008 70);
+  /* Boutons discrets, en-têtes de parties, pastilles neutres */
   --color-raised: oklch(0.285 0.01 70);
+  /* Élément cliquable survolé */
+  --color-hover: oklch(0.33 0.014 70);
   --color-line: oklch(0.38 0.012 70);
   --color-line-soft: oklch(0.3 0.01 70);
 
-  /* Texte : même le plus discret reste lisible sur un panneau (contraste ≥ 4,5) */
+  /* Texte : même le plus discret reste lisible sur une carte (contraste ≥ 4,5) */
   --color-ink: oklch(0.95 0.012 85);
   --color-ink-muted: oklch(0.78 0.012 80);
   --color-ink-faint: oklch(0.64 0.012 75);
 
-  /* Accent ambre (TR-808) */
-  --color-amber: oklch(0.79 0.158 67);
-  --color-amber-bright: oklch(0.86 0.16 75);
-  --color-amber-dim: oklch(0.66 0.12 65);
+  /* Accent ambre */
+  --color-accent: oklch(0.79 0.158 67);
+  --color-accent-bright: oklch(0.86 0.16 75);
+  --color-accent-dim: oklch(0.66 0.12 65);
 
-  /* États de progression */
+  /* Statuts : une teinte vive pour le texte, la même très atténuée pour le fond */
   --color-todo: oklch(0.7 0.012 80);
   --color-wip: oklch(0.79 0.158 67);
+  --color-wip-soft: oklch(0.79 0.158 67 / 0.15);
   --color-done: oklch(0.78 0.15 158);
+  --color-done-soft: oklch(0.78 0.15 158 / 0.15);
   --color-master: oklch(0.8 0.12 215);
+  --color-master-soft: oklch(0.8 0.12 215 / 0.15);
+
+  /* Action destructrice (au survol seulement) */
+  --color-danger: oklch(0.72 0.17 25);
 
   /* Volumes (pastilles) */
   --color-vol2: oklch(0.72 0.13 230);
@@ -64,14 +73,11 @@
 
   body {
     margin: 0;
-    background-color: var(--color-base);
+    background-color: var(--color-ground);
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv01";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-
-    /* Atmosphère : halo ambre diffus + grille step-sequencer subtile */
+    /* Atmosphère : halo ambre en haut, halo rosé en bas ; aucun motif. */
     background-image:
       radial-gradient(
         110% 80% at 85% -10%,
@@ -82,19 +88,11 @@
         90% 70% at 0% 110%,
         oklch(0.72 0.17 350 / 0.06),
         transparent 50%
-      ),
-      linear-gradient(to right, oklch(0.31 0.01 70 / 0.22) 1px, transparent 1px),
-      linear-gradient(
-        to bottom,
-        oklch(0.31 0.01 70 / 0.22) 1px,
-        transparent 1px
       );
-    background-size:
-      100% 100%,
-      100% 100%,
-      56px 56px,
-      56px 56px;
     background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
   }
 
   /* Grain léger en overlay pour la texture "matériel" */
@@ -110,13 +108,13 @@
 
   /* Au clavier, l'élément actif est toujours repérable. */
   :focus-visible {
-    outline: 2px solid var(--color-amber);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--color-amber);
-    color: var(--color-base);
+    background: var(--color-accent);
+    color: var(--color-ground);
   }
 
   /* Scrollbar discrète, style console */
@@ -139,12 +137,37 @@
   }
 }
 
+/*
+  Surfaces sans bordure : une carte se détache du fond par sa teinte plus
+  claire, un reflet en haut et une ombre en bas (lumière venant du dessus).
+*/
+@utility card {
+  background-color: var(--color-panel);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 240 220 / 0.06),
+    0 1px 3px 0 rgb(0 0 0 / 0.5);
+}
+
+/* Zone de saisie : un creux dans la carte plutôt qu'un cadre. */
+@utility well {
+  background-color: var(--color-ground);
+  box-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.55);
+}
+
+/* Ligne survolée : fond plus chaud et trait de couleur à gauche. */
+@utility hover-row {
+  &:hover {
+    background-color: var(--color-hover);
+    box-shadow: inset 3px 0 0 0 var(--color-accent);
+  }
+}
+
 @utility text-balance {
   text-wrap: balance;
 }
 
-/* Éclat ambre réutilisable (LED de boîte à rythmes) */
-@utility glow-amber {
+/* Éclat de la couleur d'action (bouton de lecture de la vidéo) */
+@utility glow-accent {
   box-shadow:
     0 0 0 1px oklch(0.79 0.158 67 / 0.35),
     0 0 24px -6px oklch(0.79 0.158 67 / 0.55);

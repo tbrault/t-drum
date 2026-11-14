@@ -29,7 +29,7 @@ export function LessonRow({ lesson, onOpen }: Props) {
       type="button"
       onClick={() => onOpen(lesson.id)}
       className={cn(
-        "group flex w-full items-center gap-4 border-b border-line-soft px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-raised/60",
+        "group flex w-full items-center gap-4 border-b border-line-soft px-4 py-3 text-left transition-colors last:border-b-0 hover-row",
         acquise && "opacity-80",
       )}
     >

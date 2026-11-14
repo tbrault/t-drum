@@ -7,7 +7,7 @@ export function VolumeTag({ volume }: { volume: Volume }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded border border-current/30 px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider",
+        "inline-flex items-center rounded bg-current/10 px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wider",
         VOLUME_COLOR[volume],
       )}
     >

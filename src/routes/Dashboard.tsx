@@ -36,12 +36,12 @@ export function Dashboard({
       <header className="mb-10">
         <div className="flex items-start justify-between">
           <h1 className="font-display text-5xl font-extrabold tracking-tight text-ink">
-            T-<span className="text-amber">Drum</span>
+            T-<span className="text-accent">Drum</span>
           </h1>
           <button
             type="button"
             onClick={onOpenCalendar}
-            className="inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:border-amber/60 hover:text-amber"
+            className="inline-flex items-center gap-2 card rounded-lg px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:bg-hover hover:text-accent"
           >
             <CalendarDays className="h-4 w-4" /> Calendrier
           </button>
@@ -51,7 +51,7 @@ export function Dashboard({
           volumes.
         </p>
 
-        <div className="mt-7 rounded-2xl border border-line bg-panel p-6">
+        <div className="card mt-7 rounded-2xl p-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex items-baseline gap-6">
               <Stat value={String(global.acquises)} label="acquises" />
@@ -67,11 +67,11 @@ export function Dashboard({
               />
             </div>
             <div className="text-right">
-              <div className="font-display text-4xl font-extrabold text-amber tabular-nums">
+              <div className="font-display text-4xl font-extrabold text-accent tabular-nums">
                 {global.pct}
-                <span className="text-xl text-amber-dim">%</span>
+                <span className="text-xl text-accent-dim">%</span>
               </div>
-              <div className="font-mono text-[10px] uppercase tracking-widest text-ink-faint">
+              <div className="font-mono text-xs uppercase tracking-widest text-ink-faint">
                 progression
               </div>
             </div>
@@ -91,11 +91,11 @@ export function Dashboard({
                 type="button"
                 key={l.id}
                 onClick={() => onOpenLesson(l.id)}
-                className="rounded-lg border border-done/30 bg-done/5 px-3 py-2 text-left transition-colors hover:border-done/60"
+                className="rounded-lg bg-done-soft px-3 py-2 text-left transition-[filter] hover:brightness-125"
               >
                 <span className="font-mono text-sm text-ink">{l.id}</span>
-                <span className="ml-2 text-xs text-ink-faint">
-                  Niveau {l.niveau}
+                <span className="ml-2 text-sm text-ink-muted">
+                  {progress[l.id]?.titre || l.titre}
                 </span>
               </button>
             ))}
@@ -115,7 +115,7 @@ export function Dashboard({
         ))}
       </div>
 
-      <footer className="mt-12 text-center font-mono text-[11px] tracking-widest text-ink-faint">
+      <footer className="mt-12 text-center font-mono text-xs tracking-widest text-ink-faint">
         T-Drum v{version}
       </footer>
     </div>
@@ -125,11 +125,11 @@ export function Dashboard({
 function Stat({
   value,
   label,
-  accent = "amber",
+  accent = "accent",
 }: {
   value: string;
   label: string;
-  accent?: "amber" | "wip" | "faint";
+  accent?: "accent" | "wip" | "faint";
 }) {
   const color =
     accent === "wip"
@@ -144,7 +144,7 @@ function Stat({
       >
         {value}
       </div>
-      <div className="font-mono text-[10px] uppercase tracking-widest text-ink-faint">
+      <div className="font-mono text-xs uppercase tracking-widest text-ink-faint">
         {label}
       </div>
     </div>

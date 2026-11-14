@@ -16,25 +16,25 @@ export const STATUTS: Record<
     label: "À faire",
     color: "text-todo",
     dot: "bg-todo",
-    active: "bg-raised text-ink ring-1 ring-inset ring-ink-faint",
+    active: "bg-raised text-ink-muted",
   },
   "en-cours": {
     label: "En cours",
     color: "text-wip",
     dot: "bg-wip",
-    active: "bg-wip/15 text-wip ring-1 ring-inset ring-wip/70",
+    active: "bg-wip-soft text-wip",
   },
   validee: {
     label: "Validée",
     color: "text-done",
     dot: "bg-done",
-    active: "bg-done/15 text-done ring-1 ring-inset ring-done/70",
+    active: "bg-done-soft text-done",
   },
   maitrisee: {
     label: "Maîtrisée",
     color: "text-master",
     dot: "bg-master",
-    active: "bg-master/15 text-master ring-1 ring-inset ring-master/70",
+    active: "bg-master-soft text-master",
   },
 };
 

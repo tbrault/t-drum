@@ -9,10 +9,7 @@ export function StatutBadge({ statut }: { statut: Statut }) {
     <span className="inline-flex items-center gap-1.5">
       <span className={cn("h-2 w-2 rounded-full", s.dot)} />
       <span
-        className={cn(
-          "font-mono text-[11px] uppercase tracking-wider",
-          s.color,
-        )}
+        className={cn("font-mono text-xs uppercase tracking-wider", s.color)}
       >
         {s.label}
       </span>
@@ -47,7 +44,7 @@ interface ControlProps {
  */
 export function StatutControl({ value, onChange }: ControlProps) {
   return (
-    <div className="inline-flex rounded-lg border border-line bg-base p-1">
+    <div className="well inline-flex rounded-lg p-1">
       {STATUT_ORDER.map((statut) => {
         const s = STATUTS[statut];
         const active = statut === value;
@@ -61,7 +58,7 @@ export function StatutControl({ value, onChange }: ControlProps) {
               "flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors",
               active
                 ? s.active
-                : "text-ink-faint hover:bg-raised/60 hover:text-ink",
+                : "text-ink-faint hover:bg-hover hover:text-ink",
             )}
           >
             <span

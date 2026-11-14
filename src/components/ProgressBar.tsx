@@ -10,12 +10,12 @@ export function ProgressBar({ pct, className }: Props) {
   return (
     <div
       className={cn(
-        "h-2 w-full overflow-hidden rounded-full bg-base",
+        "h-2 w-full overflow-hidden rounded-full bg-raised",
         className,
       )}
     >
       <div
-        className="h-full rounded-full bg-gradient-to-r from-amber-dim via-amber to-amber-bright transition-[width] duration-500 ease-out"
+        className="h-full rounded-full bg-gradient-to-r from-accent-dim via-accent to-accent-bright transition-[width] duration-500 ease-out"
         style={{ width: `${pct}%` }}
       />
     </div>

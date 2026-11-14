@@ -54,7 +54,15 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // La page ne défile pas derrière la vidéo (et sa barre de défilement
+    // ne reste pas affichée sur le côté).
+    const root = document.documentElement;
+    const overflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      root.style.overflow = overflow;
+    };
   }, [fullscreen]);
 
   // Réinitialise quand on change de leçon.
@@ -92,16 +100,20 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
   }
 
   const frame =
-    "relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-line bg-base";
+    "card relative flex aspect-video items-center justify-center overflow-hidden rounded-xl";
 
   if (status === "playing" && videoSrc) {
     // Même élément <video> dans les deux modes (pas de remontage → lecture
     // continue). On change seulement le conteneur.
     const container = fullscreen
-      ? "fixed inset-0 z-[100] flex items-center justify-center bg-black"
+      ? // `m-0` : sans ça, la marge que la colonne met entre ses blocs
+        // laisserait voir une bande de la page en bas de l'écran.
+        "fixed inset-0 z-[100] m-0 flex items-center justify-center bg-black"
       : frame;
     return (
-      <div className={container}>
+      // `data-fullscreen` permet à la page de faire passer la vidéo au-dessus
+      // de tout le reste (voir la colonne de LessonView).
+      <div className={container} data-fullscreen={fullscreen || undefined}>
         {/* biome-ignore lint/a11y/useMediaCaption: contenu perso sans sous-titres */}
         <video
           src={videoSrc}
@@ -117,7 +129,7 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
           type="button"
           aria-label={fullscreen ? "Quitter le plein écran" : "Plein écran"}
           onClick={toggleFullscreen}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg border border-line/60 bg-base/70 text-ink-muted backdrop-blur transition-colors hover:border-amber/60 hover:text-amber"
+          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg bg-ground/70 text-ink-muted backdrop-blur transition-colors hover:text-accent"
         >
           {fullscreen ? (
             <Minimize className="h-4 w-4" />
@@ -164,8 +176,8 @@ export function VideoPlayer({ videoRel, posterRel }: Props) {
       )}
       {status === "ready" && (
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="glow-amber flex h-16 w-16 items-center justify-center rounded-full bg-base/80 backdrop-blur transition-transform group-hover:scale-110">
-            <Play className="ml-1 h-7 w-7 fill-amber text-amber" />
+          <span className="glow-accent flex h-16 w-16 items-center justify-center rounded-full bg-ground/80 backdrop-blur transition-transform group-hover:scale-110">
+            <Play className="ml-1 h-7 w-7 fill-accent text-accent" />
           </span>
         </span>
       )}

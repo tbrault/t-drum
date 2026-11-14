@@ -20,7 +20,7 @@ export function Breadcrumb({ items }: { items: Crumb[] }) {
               <button
                 type="button"
                 onClick={item.onClick}
-                className="text-ink-faint transition-colors hover:text-amber"
+                className="text-ink-faint transition-colors hover:text-accent"
               >
                 {item.label}
               </button>

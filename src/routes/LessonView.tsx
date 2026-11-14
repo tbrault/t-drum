@@ -29,7 +29,7 @@ const FIELDS: { key: keyof Consignes; label: string }[] = [
 ];
 
 const LABEL =
-  "font-mono text-[11px] font-semibold uppercase tracking-widest text-ink-faint";
+  "font-mono text-xs font-semibold uppercase tracking-widest text-ink-faint";
 
 /**
  * Page d'une leçon. La barre de séance reste en haut ; les rythmes, qu'on
@@ -73,7 +73,7 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
               {lesson.hasBT && <Music3 className="h-4 w-4" />}
             </span>
             {isDue(progress) && (
-              <span className="rounded-full border border-amber/40 bg-amber/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-amber">
+              <span className="rounded-full bg-accent/15 px-3 py-1 font-mono text-xs uppercase tracking-wider text-accent">
                 À réviser
               </span>
             )}
@@ -103,7 +103,9 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
         {/* Les rythmes : la zone de travail, seule à défiler */}
         <section className="order-2 md:order-1">
           <div className="mb-4 flex items-baseline justify-between gap-3">
-            <h2 className="font-display text-xl font-bold text-ink">Rythmes</h2>
+            <h2 className="font-display text-xl font-extrabold text-ink">
+              Rythmes
+            </h2>
             <span className="font-mono text-xs text-ink-muted tabular-nums">
               {nbRythmes > 0 &&
                 `${nbRythmes} rythme${nbRythmes > 1 ? "s" : ""}`}
@@ -120,62 +122,70 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
         {/* La leçon et les notes : sous la barre, toujours à l'écran */}
         <aside
           ref={colonne}
-          className="order-1 space-y-5 md:sticky md:z-10 md:order-2 md:self-start"
+          // En plein écran, la colonne passe devant la barre de séance : sans
+          // ça, la vidéo resterait prisonnière du niveau de la colonne.
+          className="order-1 has-[[data-fullscreen]]:z-[100] md:sticky md:z-10 md:order-2 md:self-start"
         >
-          <VideoPlayer
-            videoRel={videoRelPath(lesson)}
-            posterRel={posterRelPath(lesson)}
-          />
-
-          <div className="rounded-xl border border-line bg-panel">
-            <button
-              type="button"
-              aria-expanded={consignesOuvertes}
-              onClick={() => setConsignesOuvertes((on) => !on)}
-              className={cn(
-                LABEL,
-                "flex w-full items-center gap-2 px-5 py-3.5 text-left transition-colors hover:text-amber",
-              )}
-            >
-              <ChevronRight
-                className={cn(
-                  "h-3.5 w-3.5 transition-transform",
-                  consignesOuvertes && "rotate-90",
-                )}
-              />
-              Consignes
-            </button>
-            {consignesOuvertes && (
-              <div className="space-y-5 border-t border-line-soft px-5 py-4">
-                {FIELDS.map(({ key, label }) => {
-                  const value = consignes[key];
-                  if (!value) return null;
-                  return (
-                    <div key={key}>
-                      <h3 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-amber-dim">
-                        {label}
-                      </h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                        {value as string}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          <div className="rounded-xl border border-line bg-panel px-5 py-4">
-            <label htmlFor="notes-perso" className={cn(LABEL, "mb-2 block")}>
-              Notes perso
-            </label>
-            <textarea
-              id="notes-perso"
-              value={progress.notes ?? ""}
-              onChange={(e) => set({ notes: e.target.value })}
-              rows={6}
-              className="w-full resize-y rounded-lg border border-line bg-base px-3 py-2 text-sm leading-relaxed text-ink focus:border-amber/60 focus:outline-none"
+          {/* Même hauteur que le titre « Rythmes » : les deux colonnes démarrent alignées. */}
+          <h2 className="mb-4 font-display text-xl font-extrabold text-ink">
+            Leçon
+          </h2>
+          <div className="space-y-5">
+            <VideoPlayer
+              videoRel={videoRelPath(lesson)}
+              posterRel={posterRelPath(lesson)}
             />
+
+            <div className="card rounded-xl">
+              <button
+                type="button"
+                aria-expanded={consignesOuvertes}
+                onClick={() => setConsignesOuvertes((on) => !on)}
+                className={cn(
+                  LABEL,
+                  "flex w-full items-center gap-2 px-5 py-3.5 text-left transition-colors hover:text-accent",
+                )}
+              >
+                <ChevronRight
+                  className={cn(
+                    "h-3.5 w-3.5 transition-transform",
+                    consignesOuvertes && "rotate-90",
+                  )}
+                />
+                Consignes
+              </button>
+              {consignesOuvertes && (
+                <div className="space-y-5 border-t border-line-soft px-5 py-4">
+                  {FIELDS.map(({ key, label }) => {
+                    const value = consignes[key];
+                    if (!value) return null;
+                    return (
+                      <div key={key}>
+                        <h3 className="font-mono text-xs font-semibold uppercase tracking-widest text-accent-dim">
+                          {label}
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
+                          {value as string}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="card rounded-xl px-5 py-4">
+              <label htmlFor="notes-perso" className={cn(LABEL, "mb-2 block")}>
+                Notes perso
+              </label>
+              <textarea
+                id="notes-perso"
+                value={progress.notes ?? ""}
+                onChange={(e) => set({ notes: e.target.value })}
+                rows={6}
+                className="well w-full resize-y rounded-lg border border-transparent px-3 py-2 text-sm leading-relaxed text-ink focus:border-accent/60 focus:outline-none"
+              />
+            </div>
           </div>
         </aside>
       </div>
@@ -241,13 +251,13 @@ function StatutLecon({
           onChange={(statut) => progressStore.setStatut(lessonId, statut)}
         />
       )}
-      <p className="font-mono text-[11px] text-ink-faint">
+      <p className="font-mono text-xs text-ink-faint">
         {cible
           ? prochaineEtape(progress, cible)
           : "Pas de tempo cible : statut à choisir"}
       </p>
       {jours !== null && (
-        <p className="font-mono text-[11px] text-ink-faint">
+        <p className="font-mono text-xs text-ink-faint">
           {jours > 0
             ? `Prochaine révision dans ${jours} j`
             : jours === 0

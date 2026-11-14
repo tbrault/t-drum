@@ -13,6 +13,12 @@ type View =
 
 function App() {
   const [view, setView] = useState<View>({ name: "dashboard" });
+
+  /** Change d'écran ; chaque écran s'ouvre en haut de page. */
+  function go(next: View) {
+    setView(next);
+    window.scrollTo(0, 0);
+  }
   const loaded = useProgressLoaded();
 
   useEffect(() => {
@@ -33,29 +39,29 @@ function App() {
     <main className="min-h-screen">
       {view.name === "dashboard" && (
         <Dashboard
-          onOpenNiveau={(numero) => setView({ name: "niveau", numero })}
-          onOpenLesson={(id) => setView({ name: "lesson", id })}
-          onOpenCalendar={() => setView({ name: "calendar" })}
+          onOpenNiveau={(numero) => go({ name: "niveau", numero })}
+          onOpenLesson={(id) => go({ name: "lesson", id })}
+          onOpenCalendar={() => go({ name: "calendar" })}
         />
       )}
       {view.name === "calendar" && (
         <CalendarView
-          onDashboard={() => setView({ name: "dashboard" })}
-          onOpenLesson={(id) => setView({ name: "lesson", id })}
+          onDashboard={() => go({ name: "dashboard" })}
+          onOpenLesson={(id) => go({ name: "lesson", id })}
         />
       )}
       {view.name === "niveau" && (
         <NiveauView
           numero={view.numero}
-          onDashboard={() => setView({ name: "dashboard" })}
-          onOpenLesson={(id) => setView({ name: "lesson", id })}
+          onDashboard={() => go({ name: "dashboard" })}
+          onOpenLesson={(id) => go({ name: "lesson", id })}
         />
       )}
       {view.name === "lesson" && (
         <LessonView
           lessonId={view.id}
-          onDashboard={() => setView({ name: "dashboard" })}
-          onNiveau={(numero) => setView({ name: "niveau", numero })}
+          onDashboard={() => go({ name: "dashboard" })}
+          onNiveau={(numero) => go({ name: "niveau", numero })}
         />
       )}
     </main>

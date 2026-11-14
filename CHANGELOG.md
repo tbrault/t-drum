@@ -5,6 +5,39 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.6.0 — 2026-11-14
+
+### Corrigé
+
+- Vidéo en plein écran : la barre de séance ne s'affiche plus par-dessus la
+  vidéo, et la page ne dépasse plus en bas de l'écran.
+- Chaque page s'ouvre en haut, au lieu de garder la hauteur de défilement de
+  la page précédente.
+
+### Modifié
+
+- Tailles de texte alignées sur une échelle fixe (12, 14, 16, 18, 20, 24,
+  30, 36, 48 px) : plus aucun texte en 10 ou 11 px.
+- Passe d'interface sur toute l'app, selon les principes de Refactoring UI :
+  les panneaux, cartes et lignes se distinguent par leur teinte et leur
+  espacement plutôt que par des bordures ; le bouton du chrono est le seul
+  bouton plein de la page, les autres sont plus discrets ; deux graisses de
+  texte au lieu de quatre ; les champs de saisie sont des zones en creux.
+- Calendrier et « À réviser » : le titre de la leçon s'affiche à côté de son
+  numéro.
+- Couleurs : la palette charbon et ambre est conservée. Les statuts ont une
+  pastille teintée (ambre, vert, bleu) et la corbeille rougit au survol.
+- Barres de progression : le fond de la barre est visible partout, y compris
+  sur la page d'un niveau.
+- Le quadrillage du fond est retiré.
+- Survols plus marqués sur ce qui se clique : la ligne survolée change de
+  teinte et prend un trait ambre à gauche.
+- Champs de nom visibles : le nom d'un rythme a un fond de champ, et une
+  partie sans nom montre son emplacement vide. Après « Ajouter un rythme »
+  ou « Ajouter une partie », le curseur est déjà dans le champ du nom.
+- Page d'une leçon : un titre « Leçon » au-dessus de la vidéo, aligné sur le
+  titre « Rythmes ».
+
 ## 1.5.0 — 2026-11-14
 
 ### Ajouté
