@@ -31,7 +31,7 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
   const titre = titres[niveau.numero] ?? niveau.titre ?? "";
 
   return (
-    <div className="mx-auto max-w-4xl px-8 py-8">
+    <div className="mx-auto max-w-5xl px-8 py-8">
       <Breadcrumb
         items={[
           { label: "Tableau de bord", onClick: onDashboard },

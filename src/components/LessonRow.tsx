@@ -1,7 +1,9 @@
 import { Film, Music3 } from "lucide-react";
 import type { Lesson } from "@/content/types";
+import { minutesForLesson } from "@/lib/agenda";
+import { formatDuree } from "@/lib/dates";
 import { cn } from "@/lib/utils";
-import { useLessonProgress } from "@/progress/store";
+import { useLessonProgress, useSessions } from "@/progress/store";
 import { StatutBadge } from "./StatutControl";
 
 interface Props {
@@ -14,6 +16,12 @@ export function LessonRow({ lesson, onOpen }: Props) {
   const progress = useLessonProgress(lesson.id);
   const acquise = progress.statut === "acquise";
   const nbRythmes = progress.rythmes.length;
+  const minutes = minutesForLesson(useSessions(), lesson.id);
+
+  // Tempo le plus bas et le plus haut atteints, tous rythmes confondus.
+  const bpms = progress.rythmes.flatMap((r) => (r.bpm ? [r.bpm] : []));
+  const bpmMin = bpms.length > 0 ? Math.min(...bpms) : null;
+  const bpmMax = bpms.length > 0 ? Math.max(...bpms) : null;
 
   return (
     <button
@@ -39,6 +47,25 @@ export function LessonRow({ lesson, onOpen }: Props) {
 
       <span className="w-20 shrink-0 text-right font-mono text-xs text-ink-faint tabular-nums">
         {nbRythmes > 0 ? `${nbRythmes} rythme${nbRythmes > 1 ? "s" : ""}` : ""}
+      </span>
+
+      <span
+        className="w-28 shrink-0 text-right font-mono text-xs text-ink-muted tabular-nums"
+        title="Tempo le plus bas et le plus haut atteints sur la leçon"
+      >
+        {bpmMin !== null && (
+          <>
+            {bpmMin === bpmMax ? bpmMin : `${bpmMin}–${bpmMax}`}
+            <span className="ml-1 text-ink-faint">BPM</span>
+          </>
+        )}
+      </span>
+
+      <span
+        className="w-16 shrink-0 text-right font-mono text-xs text-ink-muted tabular-nums"
+        title="Temps total passé sur la leçon"
+      >
+        {minutes > 0 ? formatDuree(minutes) : ""}
       </span>
 
       <span className="w-20 shrink-0 text-right">

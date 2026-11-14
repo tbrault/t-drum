@@ -5,6 +5,13 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.3.0 — 2026-11-14
+
+### Ajouté
+
+- Page d'un niveau : chaque leçon affiche le tempo le plus bas et le plus haut
+  atteints (tous rythmes confondus) et le temps total passé dessus.
+
 ## 1.2.0 — 2026-11-14
 
 ### Ajouté
