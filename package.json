@@ -1,7 +1,7 @@
 {
   "name": "t-drum",
   "private": true,
-  "version": "1.7.0",
+  "version": "1.8.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -26,7 +26,8 @@
     "lucide-react": "^1.18.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "tone": "15.1.22"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",

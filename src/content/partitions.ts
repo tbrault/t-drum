@@ -19,8 +19,13 @@ interface ZonesSource {
   pages: Record<string, number[][]>;
   /** Titre des morceaux (binaires, solos), aligné sur les cadres de la page. */
   noms: Record<string, (string | null)[]>;
+  /** Nombre de mesures de chaque exercice, aligné sur les cadres de la page. */
+  mesures: Record<string, (number | null)[]>;
+  /** Structure de chaque exercice (« G%%G|GG%G »), alignée sur les cadres. */
+  plans: Record<string, (string | null)[]>;
 }
-const ZONES = zonesJson as Record<SourcePartition, ZonesSource>;
+// Fichier généré par scripts/detecter-exercices.swift.
+const ZONES = zonesJson as unknown as Record<SourcePartition, ZonesSource>;
 
 /** Pages disponibles par document (numéros imprimés, voir le script). */
 const BORNES: Record<SourcePartition, [number, number]> = {
@@ -50,6 +55,27 @@ export function zonesDePage({ source, page }: PagePartition): Zone[] {
  */
 export function nomsDePage({ source, page }: PagePartition): (string | null)[] {
   return ZONES[source]?.noms[String(page)] ?? [];
+}
+
+/**
+ * Nombre de mesures de l'exercice repéré à cette zone (barres de mesure
+ * comptées sur la partition), ou `null` s'il n'a pas pu être compté.
+ */
+export function mesuresDeZone(page: PagePartition, zone: Zone): number | null {
+  const i = zonesDePage(page).findIndex((z) => memeZone(z, zone));
+  if (i < 0) return null;
+  return ZONES[page.source]?.mesures?.[String(page.page)]?.[i] ?? null;
+}
+
+/**
+ * Structure de l'exercice repéré à cette zone, une lettre par mesure : G
+ * (groove), % (mesure répétée), F (break), | entre deux lignes. `null` si
+ * elle n'a pas pu être lue.
+ */
+export function planDeZone(page: PagePartition, zone: Zone): string | null {
+  const i = zonesDePage(page).findIndex((z) => memeZone(z, zone));
+  if (i < 0) return null;
+  return ZONES[page.source]?.plans?.[String(page.page)]?.[i] ?? null;
 }
 
 /** « Vol. 3 — p. 18 », « Annexes — p. 3 ». */

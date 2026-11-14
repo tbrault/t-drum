@@ -1,4 +1,5 @@
 import type { SourcePartition, Zone } from "@/content/partitions";
+import type { StyleAccompagnement } from "@/lib/accompagnement";
 
 /** Exercice de la partition associé à un rythme : une zone d'une page. */
 export interface PartitionRythme {
@@ -28,6 +29,16 @@ export interface Rythme {
   partieId?: string;
   /** Exercice de la partition correspondant. */
   partition?: PartitionRythme;
+  /**
+   * Accompagnement choisi pour jouer ce rythme en musique : style, et nombre
+   * de mesures du morceau (`null` = en boucle) s'il a été corrigé à la main.
+   */
+  accompagnement?: {
+    style?: StyleAccompagnement;
+    mesures?: number | null;
+    /** Structure corrigée à la main (« FGG|GFG… »). */
+    plan?: string;
+  };
 }
 
 /**

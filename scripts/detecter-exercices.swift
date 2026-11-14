@@ -15,8 +15,10 @@
 // Un binaire ou un solo (morceau titré « BINAIRE 9 », « SOLO 4 ») est un seul
 // exercice, même sur plusieurs lignes : les titres de la page sont lus par la
 // reconnaissance de texte de macOS, et les lignes du morceau, jusqu'au titre
-// suivant, sont réunies en un cadre qui garde le titre. Les cadres ne
-// contiennent que des nombres et ces titres, aucune partition.
+// suivant, sont réunies en un cadre qui garde le titre. Les mesures de chaque
+// exercice sont comptées (barres de mesure), pour caler l'accompagnement sur
+// la longueur du morceau. Les cadres ne contiennent que des nombres et ces
+// titres, aucune partition.
 import AppKit
 import Foundation
 import Vision
@@ -52,6 +54,197 @@ struct Cadre {
     var x0, y0, x1, y1: Int
     /// Titre du morceau (« Binaire 9 », « Solo 4 »), pour un binaire ou un solo.
     var nom: String? = nil
+    /// Nombre de mesures (barres de mesure comptées), si la portée est lisible.
+    var mesures: Int? = nil
+    /// Structure d'après l'encre de chaque mesure : G (groove), % (mesure
+    /// répétée), F (mesure bien plus chargée), | entre deux lignes.
+    var densite: String? = nil
+    /// Charleston de chaque mesure : 1 (joué tout du long), 0 (interrompu :
+    /// le batteur fait un break), % (mesure répétée), | entre deux lignes.
+    var charleston: String? = nil
+
+    /// Structure retenue, une lettre par mesure : G, % ou F (break).
+    var plan: String? {
+        guard let densite else { return nil }
+        guard let charleston else { return densite }
+        // Un groove au charleston (les binaires) : chaque mesure où il
+        // s'interrompt est un break. Sinon (solos), on s'en tient à l'encre.
+        let jouees = charleston.filter { $0 == "1" || $0 == "0" }
+        let pleines = charleston.filter { $0 == "1" }
+        guard !jouees.isEmpty, Double(pleines.count) >= 0.5 * Double(jouees.count) else { return densite }
+        return String(charleston.map { $0 == "1" ? "G" : $0 == "0" ? "F" : $0 })
+    }
+}
+
+/// Compte les mesures d'une portée à cinq lignes : une barre de mesure est
+/// un trait vertical qui couvre exactement la portée, de la ligne du haut à
+/// celle du bas, sans dépasser (une hampe de note, elle, dépasse).
+/// Barres trouvées (pour l'aperçu) : abscisse, haut et bas de la portée.
+var barresVues: [(x: Int, haut: Int, bas: Int)] = []
+
+func compterMesures(_ p: Page, _ c: Cadre) -> (mesures: Int, densite: String, charleston: String)? {
+    let W = p.w, H = p.h
+    let largeur = c.x1 - c.x0
+    guard largeur > 0 else { return nil }
+    // Lignes de la portée : rangées traversées par un long trait fin.
+    var lignes: [(debut: Int, fin: Int)] = []
+    var y = c.y0
+    while y <= c.y1 {
+        var suite = 0, meilleure = 0
+        for x in c.x0...c.x1 {
+            if p.encre(x, y) { suite += 1; meilleure = max(meilleure, suite) } else { suite = 0 }
+        }
+        if Double(meilleure) >= 0.3 * Double(largeur) {
+            let debut = y
+            while y + 1 <= c.y1 {
+                var s2 = 0, m2 = 0
+                for x in c.x0...c.x1 {
+                    if p.encre(x, y + 1) { s2 += 1; m2 = max(m2, s2) } else { s2 = 0 }
+                }
+                if Double(m2) < 0.3 * Double(largeur) { break }
+                y += 1
+            }
+            if y - debut <= 6 { lignes.append((debut, y)) }
+        }
+        y += 1
+    }
+    // Les cinq lignes d'une même portée sont rapprochées.
+    var groupes: [[(debut: Int, fin: Int)]] = []
+    for l in lignes {
+        if let d = groupes.last?.last, l.debut - d.fin <= Int(0.02 * Double(H)) {
+            groupes[groupes.count - 1].append(l)
+        } else {
+            groupes.append([l])
+        }
+    }
+    guard let portee = groupes.max(by: { $0.count < $1.count }), portee.count >= 4 else { return nil }
+    let haut = portee.first!.debut, bas = portee.last!.fin
+    let marge = 4, hors = 10
+    guard haut - hors >= 0, bas + hors < H else { return nil }
+
+    func estBarre(_ x: Int) -> Bool {
+        var dedans = 0
+        for y in haut...bas where p.encre(x, y) { dedans += 1 }
+        guard Double(dedans) >= 0.92 * Double(bas - haut + 1) else { return false }
+        var dessus = 0, dessous = 0
+        for y in (haut - hors)...(haut - marge) where p.encre(x, y) { dessus += 1 }
+        for y in (bas + marge)...(bas + hors) where p.encre(x, y) { dessous += 1 }
+        guard dessus <= 2 && dessous <= 2 else { return false }
+        // Une barre est entourée de blanc entre les lignes ; une hampe touche
+        // la tête de sa note, juste à côté.
+        let interieur = (haut...bas).filter { y in !portee.contains { ($0.debut - 1...$0.fin + 1).contains(y) } }
+        func voisinage(_ dx: ClosedRange<Int>) -> Double {
+            var n = 0, total = 0
+            for y in interieur {
+                for d in dx where x + d >= 0 && x + d < W {
+                    total += 1
+                    if p.encre(x + d, y) { n += 1 }
+                }
+            }
+            return total == 0 ? 0 : Double(n) / Double(total)
+        }
+        guard voisinage(4...8) < 0.15 else { return false }
+        if voisinage(-8 ... -4) < 0.15 { return true }
+        // Double barre de fin, collée à la dernière note : la portée s'arrête
+        // juste après.
+        let apres = (x + 12)...min(W - 1, x + 20)
+        return !portee.contains { l in apres.contains { xx in (l.debut...l.fin).contains { p.encre(xx, $0) } } }
+    }
+    // Colonnes voisines (trait épais, double barre de fin) = une seule barre.
+    let barres = plages(largeur + 1, blancMin: Int(0.012 * Double(W))) { estBarre(c.x0 + $0) }
+    // Début de la portée : une barre collée au début ne ferme pas de mesure.
+    var debutPortee = c.x1
+    for x in c.x0...c.x1 where portee.contains(where: { l in (l.debut...l.fin).contains { p.encre(x, $0) } }) {
+        debutPortee = x
+        break
+    }
+    var utiles = barres.filter { c.x0 + $0.debut - debutPortee > Int(0.03 * Double(W)) }
+    // Coup final : une toute petite mesure après la dernière (une seule note
+    // avant la double barre) n'est pas comptée, l'accord de fin tombe dessus.
+    if utiles.count >= 3 {
+        var largeurs: [Int] = []
+        var precedente = debutPortee
+        for b in utiles {
+            largeurs.append(c.x0 + b.debut - precedente)
+            precedente = c.x0 + b.fin
+        }
+        let mediane = largeurs.dropLast().sorted()[(largeurs.count - 1) / 2]
+        if Double(largeurs.last!) < 0.35 * Double(mediane) { utiles.removeLast() }
+    }
+    for b in utiles { barresVues.append((c.x0 + b.debut, haut, bas)) }
+    guard !utiles.isEmpty else { return nil }
+
+    // Structure : densité d'encre de chaque mesure, hors lignes de portée.
+    // Une mesure presque vide est un « % » (mesure répétée) ; une mesure bien
+    // plus chargée que les autres est un break (le batteur fait un fill).
+    let lignesPortee = Set(portee.flatMap { ($0.debut - 1)...($0.fin + 1) })
+    var densites: [Double] = []
+    var gauche = debutPortee
+    for b in utiles {
+        let droite = c.x0 + b.debut
+        let a = gauche + 4, z = droite - 4
+        var n = 0, total = 0
+        if z > a {
+            for y in c.y0...c.y1 where !lignesPortee.contains(y) {
+                for x in a...z {
+                    total += 1
+                    if p.encre(x, y) { n += 1 }
+                }
+            }
+        }
+        densites.append(total == 0 ? 0 : Double(n) / Double(total))
+        gauche = c.x0 + b.fin
+    }
+    let triees = densites.sorted()
+    let mediane = triees[triees.count / 2]
+    let plan = densites.enumerated().map { i, d -> String in
+        if d < 0.4 * mediane { return "%" }
+        let derniere = i == densites.count - 1
+        if (derniere && d > 1.15 * mediane) || d > 1.5 * mediane { return "F" }
+        return "G"
+    }.joined()
+
+    // Charleston : dans un groove, ses croches liées par des barres forment
+    // une rangée de traits horizontaux au-dessus de la portée, d'un bout à
+    // l'autre de la mesure. Un trou dans cette rangée = un break.
+    let hauteur = Double(bas - haut)
+    let bandeHaut = max(c.y0, haut - Int(1.15 * hauteur))
+    let bandeBas = haut - Int(0.5 * hauteur)
+    // Ces traits sont tous à la même hauteur sur la ligne : la rangée la plus
+    // encrée de la bande. Les barres penchées d'un break ne font que la croiser.
+    var rangee = bandeHaut, record = 0
+    if bandeBas > bandeHaut {
+        for y in bandeHaut...bandeBas {
+            var n = 0
+            for x in debutPortee...c.x1 where p.encre(x, y) { n += 1 }
+            if n > record { record = n; rangee = y }
+        }
+    }
+    func trait(_ x: Int) -> Bool {
+        guard record > 0, x - 3 >= 0, x + 3 < W else { return false }
+        for y in max(0, rangee - 2)...(rangee + 2) where p.encre(x, y) && p.encre(x - 3, y) && p.encre(x + 3, y) {
+            return true
+        }
+        return false
+    }
+    // La clé (et la mesure, en début de morceau) ouvre chaque ligne.
+    let cle = Int(0.035 * Double(W))
+    var charleston = ""
+    gauche = debutPortee + cle
+    for (i, b) in utiles.enumerated() {
+        let droite = c.x0 + b.debut
+        defer { gauche = c.x0 + b.fin }
+        if Array(plan)[i] == "%" { charleston += "%"; continue }
+        let a = gauche + 4, z = droite - 4
+        guard z - a > 20 else { charleston += "0"; continue }
+        // Plus grand trou sans trait, bords compris.
+        var trou = 0, courant = 0
+        for x in a...z {
+            if trait(x) { courant = 0 } else { courant += 1; trou = max(trou, courant) }
+        }
+        charleston += Double(trou) > 0.3 * Double(z - a) ? "0" : "1"
+    }
+    return (utiles.count, plan, charleston)
 }
 
 /// Plages consécutives où `encre(i)` est vrai, séparées par des blancs d'au
@@ -205,7 +398,15 @@ func detecter(_ p: Page) -> [Cadre] {
                     x1: min(W - 1, m.fin + marge), y1: min(H - 1, y1 + marge)))
         }
     }
-    return cadres
+    return cadres.map { c in
+        var c = c
+        if let compte = compterMesures(p, c) {
+            c.mesures = compte.mesures
+            c.densite = compte.densite
+            c.charleston = compte.charleston
+        }
+        return c
+    }
 }
 
 /// Titre lu sur la page, en fraction de la page (origine en haut à gauche).
@@ -323,6 +524,22 @@ func fusionnerMorceaux(_ cadres: [Cadre], _ p: Page, suite: String?)
             union.y1 = max(union.y1, res[i].y1)
         }
         union.nom = section.nom
+        // Un morceau compte les mesures de toutes ses lignes. Une ligne
+        // illisible est estimée d'après la moyenne des autres, tant qu'au
+        // moins la moitié des lignes a pu être comptée.
+        let comptes = dedans.compactMap { res[$0].mesures }
+        if !comptes.isEmpty && comptes.count * 2 >= dedans.count {
+            let moyenne = Double(comptes.reduce(0, +)) / Double(comptes.count)
+            union.mesures = Int((moyenne * Double(dedans.count)).rounded())
+        } else {
+            union.mesures = nil
+        }
+        // La structure n'est sûre que si chaque ligne a été lue.
+        let densites = dedans.compactMap { res[$0].densite }
+        let charlestons = dedans.compactMap { res[$0].charleston }
+        let complet = densites.count == dedans.count && charlestons.count == dedans.count
+        union.densite = complet ? densites.joined(separator: "|") : nil
+        union.charleston = complet ? charlestons.joined(separator: "|") : nil
         res = res.enumerated().compactMap { i, c in
             i == premier ? union : (dedans.contains(i) ? nil : c)
         }
@@ -357,10 +574,21 @@ if args.count >= 5 && args[1] == "--apercu" {
             ctx.cgContext.stroke(
                 CGRect(x: c.x0, y: page.h - c.y1, width: c.x1 - c.x0, height: c.y1 - c.y0))
         }
+        ctx.cgContext.setStrokeColor(NSColor.blue.cgColor)
+        ctx.cgContext.setLineWidth(5)
+        for b in barresVues {
+            ctx.cgContext.stroke(CGRect(x: b.x - 6, y: page.h - b.bas - 12, width: 12, height: b.bas - b.haut + 24))
+        }
+        barresVues = []
         ctx.flushGraphics()
         let jpeg = rep.representation(using: .jpeg, properties: [.compressionFactor: 0.6])!
         try! jpeg.write(to: URL(fileURLWithPath: "\(sortie)/\(source)-\(nom).jpg"))
-        print("\(source) p.\(pageTxt) : \(cadres.count) exercices \(cadres.compactMap(\.nom))")
+        let resume: [String] = cadres.map { c in
+            let nom = c.nom ?? "·"
+            let compte = c.mesures.map { "\($0) mes." } ?? "?"
+            return "\(nom) \(compte) \(c.plan ?? "")"
+        }
+        print("\(source) p.\(pageTxt) : \(cadres.count) exercices \(resume)")
     }
     exit(0)
 }
@@ -377,6 +605,8 @@ for source in sources {
     var total = 0
     var pagesMorceaux: [Int] = []
     var noms: [String: [String?]] = [:]
+    var mesures: [String: [Int?]] = [:]
+    var plans: [String: [String?]] = [:]
     var suite: String? = nil
     for f in fichiers.sorted() {
         guard let n = numero(f), let page = Page(chemin: "\(dossier)/\(f)") else { continue }
@@ -385,6 +615,8 @@ for source in sources {
         suite = suiteSuivante
         if morceaux > 0 { pagesMorceaux.append(n) }
         if cadres.contains(where: { $0.nom != nil }) { noms[String(n)] = cadres.map(\.nom) }
+        if cadres.contains(where: { $0.mesures != nil }) { mesures[String(n)] = cadres.map(\.mesures) }
+        if cadres.contains(where: { $0.plan != nil }) { plans[String(n)] = cadres.map(\.plan) }
         total += cadres.count
         if cadres.isEmpty { continue }
         pages[String(n)] = cadres.map { c in
@@ -395,7 +627,9 @@ for source in sources {
             ]
         }
     }
-    resultat[source] = ["ratio": arrondi(ratio), "pages": pages, "noms": noms]
+    resultat[source] = [
+        "ratio": arrondi(ratio), "pages": pages, "noms": noms, "mesures": mesures, "plans": plans,
+    ]
     print("\(source) : \(total) exercices sur \(pages.count) pages")
     print("  binaires et solos réunis, pages : \(pagesMorceaux.map(String.init).joined(separator: " "))")
 }
@@ -411,7 +645,9 @@ var lignes: [String] = []
 for source in sources {
     guard let entree = resultat[source] as? [String: Any],
         let pages = entree["pages"] as? [String: [[Double]]], let ratio = entree["ratio"] as? Double,
-        let noms = entree["noms"] as? [String: [String?]]
+        let noms = entree["noms"] as? [String: [String?]],
+        let mesures = entree["mesures"] as? [String: [Int?]],
+        let plans = entree["plans"] as? [String: [String?]]
     else { continue }
     let corps = pages.keys.sorted { Int($0)! < Int($1)! }.map { page in
         let cadres = pages[page]!.map { "[" + $0.map(nombre).joined(separator: ",") + "]" }
@@ -427,10 +663,22 @@ for source in sources {
         }
         return "      \"\(page)\": [" + liste.joined(separator: ",") + "]"
     }
-    lignes.append(
-        "  \"\(source)\": {\n    \"ratio\": \(nombre(ratio)),\n    \"pages\": {\n"
-            + corps.joined(separator: ",\n") + "\n    },\n    \"noms\": {\n"
-            + corpsNoms.joined(separator: ",\n") + "\n    }\n  }")
+    let corpsMesures = mesures.keys.sorted { Int($0)! < Int($1)! }.map { page in
+        "      \"\(page)\": [" + mesures[page]!.map { $0.map(String.init) ?? "null" }.joined(separator: ",") + "]"
+    }
+    // Assemblé en plusieurs morceaux : une seule expression est trop lourde
+    // pour le compilateur Swift.
+    var bloc = "  \"\(source)\": {\n"
+    bloc += "    \"ratio\": \(nombre(ratio)),\n"
+    bloc += "    \"pages\": {\n" + corps.joined(separator: ",\n") + "\n    },\n"
+    bloc += "    \"noms\": {\n" + corpsNoms.joined(separator: ",\n") + "\n    },\n"
+    let corpsPlans = plans.keys.sorted { Int($0)! < Int($1)! }.map { page in
+        "      \"\(page)\": [" + plans[page]!.map { $0.map { "\"\($0)\"" } ?? "null" }.joined(separator: ",") + "]"
+    }
+    bloc += "    \"mesures\": {\n" + corpsMesures.joined(separator: ",\n") + "\n    },\n"
+    bloc += "    \"plans\": {\n" + corpsPlans.joined(separator: ",\n") + "\n    }\n"
+    bloc += "  }"
+    lignes.append(bloc)
 }
 let json = "{\n" + lignes.joined(separator: ",\n") + "\n}\n"
 try! json.write(toFile: "src/content/partitions-zones.json", atomically: true, encoding: .utf8)

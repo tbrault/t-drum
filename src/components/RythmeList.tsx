@@ -21,6 +21,7 @@ import {
   ArrowUp,
   ChevronRight,
   GripVertical,
+  Headphones,
   ListPlus,
   Minus,
   Music,
@@ -48,6 +49,10 @@ interface Props {
   afficherPartitions: boolean;
   /** Ouvre la partition pour choisir l'exercice d'un rythme. */
   onChoisirPartition: (rythme: Rythme) => void;
+  /** Rythme dont l'accompagnement est ouvert. */
+  accompagne?: string;
+  /** Ouvre le lecteur d'accompagnement pour un rythme. */
+  onAccompagner: (rythme: Rythme) => void;
 }
 
 /**
@@ -94,6 +99,8 @@ export function RythmeList({
   tempoCible,
   afficherPartitions,
   onChoisirPartition,
+  accompagne,
+  onAccompagner,
 }: Props) {
   // Élément qu'on vient de créer : son champ de nom s'ouvre tout seul.
   const [nouveau, setNouveau] = useState<string | null>(null);
@@ -213,6 +220,8 @@ export function RythmeList({
                 }
                 afficherPartition={afficherPartitions}
                 onChoisirPartition={() => onChoisirPartition(item.rythme)}
+                accompagne={item.id === accompagne}
+                onAccompagner={() => onAccompagner(item.rythme)}
               />
             );
           })}
@@ -399,6 +408,8 @@ function RythmeRow({
   onCouper,
   afficherPartition,
   onChoisirPartition,
+  accompagne,
+  onAccompagner,
 }: {
   lessonId: string;
   item: Extract<Item, { kind: "rythme" }>;
@@ -409,6 +420,8 @@ function RythmeRow({
   onCouper: () => void;
   afficherPartition: boolean;
   onChoisirPartition: () => void;
+  accompagne: boolean;
+  onAccompagner: () => void;
 }) {
   const { rythme, dansPartie, coupable } = item;
   const update = (patch: Partial<Omit<Rythme, "id">>) =>
@@ -507,7 +520,20 @@ function RythmeRow({
           </div>
 
           {/* Largeur fixe : les colonnes restent alignées d'une ligne à l'autre. */}
-          <div className="flex w-24 items-center justify-end">
+          <div className="flex w-32 items-center justify-end">
+            <button
+              type="button"
+              aria-label="Jouer sur un accompagnement"
+              title="Jouer sur un accompagnement"
+              onClick={onAccompagner}
+              className={cn(
+                ICON_BTN,
+                "hover:text-accent",
+                accompagne && "bg-accent/15 text-accent",
+              )}
+            >
+              <Headphones className="h-4 w-4" />
+            </button>
             <button
               type="button"
               aria-label={

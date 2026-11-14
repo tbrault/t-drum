@@ -32,6 +32,9 @@ swiftc -O scripts/detecter-exercices.swift -o /tmp/detecter && /tmp/detecter
                                             # cadres des exercices → src/content/partitions-zones.json
 ```
 
+Les échantillons d'instruments de l'accompagnement (`public/sons/`, ~2 Mo,
+versionnés) se récupèrent avec `bash scripts/telecharger-sons.sh`.
+
 Le numéro d'une image est le numéro imprimé sur la page (page N = (N+1)ᵉ du
 fichier dans les volumes). Seuls les cadres (des nombres) sont versionnés.
 

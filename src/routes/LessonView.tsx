@@ -1,5 +1,6 @@
 import { ChevronRight, Eye, EyeOff, Film, Music3 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AccompagnementBar } from "@/components/AccompagnementBar";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { EditableTitle } from "@/components/EditableTitle";
 import { PartitionViewer } from "@/components/PartitionViewer";
@@ -11,11 +12,14 @@ import { VolumeTag } from "@/components/VolumeTag";
 import { getLesson, posterRelPath, videoRelPath } from "@/content";
 import {
   libellePage,
+  mesuresDeZone,
   type PagePartition,
   pagesDeLecon,
+  planDeZone,
   ratioPage,
 } from "@/content/partitions";
 import type { Consignes, TempoCible } from "@/content/types";
+import { styleParDefaut } from "@/lib/accompagnement";
 import { useUrlPage } from "@/lib/partitions";
 import { daysUntilDue, isDue } from "@/lib/revision";
 import { rythmesAuTempo } from "@/lib/statut";
@@ -59,8 +63,11 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
     depart: PagePartition;
     rythmeId?: string;
   } | null>(null);
+  // Rythme dont le lecteur d'accompagnement est ouvert.
+  const [accompagne, setAccompagne] = useState<string | null>(null);
   if (!lesson) return null;
   const pagesLecon = pagesDeLecon(lesson);
+  const rythmeAccompagne = progress.rythmes.find((r) => r.id === accompagne);
 
   /** Ouvre la partition pour choisir l'exercice d'un rythme. */
   function choisirPartition(rythme: Rythme) {
@@ -74,7 +81,13 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
     progressStore.set(lessonId, patch);
 
   return (
-    <div className="mx-auto max-w-[1280px] px-8 py-8">
+    <div
+      className={cn(
+        "mx-auto max-w-[1280px] px-8 py-8",
+        // Place pour le lecteur collé en bas de l'écran.
+        accompagne && "pb-28",
+      )}
+    >
       <Breadcrumb
         items={[
           { label: "Tableau de bord", onClick: onDashboard },
@@ -161,6 +174,8 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
             tempoCible={consignes.tempoCible}
             afficherPartitions={afficherPartitions}
             onChoisirPartition={choisirPartition}
+            accompagne={accompagne ?? undefined}
+            onAccompagner={(r) => setAccompagne(r.id)}
           />
         </section>
 
@@ -241,6 +256,42 @@ export function LessonView({ lessonId, onDashboard, onNiveau }: Props) {
           </div>
         </aside>
       </div>
+
+      {rythmeAccompagne && (
+        <AccompagnementBar
+          // Un autre rythme repart de ses propres réglages.
+          key={rythmeAccompagne.id}
+          lessonId={lessonId}
+          rythme={rythmeAccompagne}
+          styleDefaut={styleParDefaut(
+            [
+              rythmeAccompagne.libelle,
+              lesson.titre,
+              consignes.objectifs,
+              consignes.echauffement,
+              consignes.notes,
+            ].join(" "),
+          )}
+          bpmDefaut={consignes.tempoCible?.min ?? 80}
+          mesuresPartition={
+            rythmeAccompagne.partition
+              ? mesuresDeZone(
+                  rythmeAccompagne.partition,
+                  rythmeAccompagne.partition.zone,
+                )
+              : null
+          }
+          planPartition={
+            rythmeAccompagne.partition
+              ? planDeZone(
+                  rythmeAccompagne.partition,
+                  rythmeAccompagne.partition.zone,
+                )
+              : null
+          }
+          onFermer={() => setAccompagne(null)}
+        />
+      )}
 
       {visionneuse && (
         <PartitionViewer

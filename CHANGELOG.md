@@ -5,6 +5,41 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.8.0 — 2026-11-14
+
+### Ajouté
+
+- Accompagnement : le casque d'un rythme ouvre un lecteur en bas de l'écran
+  qui joue de vrais instruments enregistrés, sans batterie, pour travailler
+  le rythme en musique. Six styles, proposés d'après la leçon et retenus
+  pour chaque rythme : rock (guitare saturée, basse), pop (piano, basse),
+  funk (guitare claire, piano électrique, basse), shuffle blues (guitare
+  saturée, basse), jazz swing et valse jazz en 3/4 (piano, contrebasse,
+  trompette qui joue la mélodie un tour sur deux).
+- Un morceau propre à chaque binaire et solo : sa structure est lue sur la
+  partition (mesures de groove, mesures répétées « % », breaks : les mesures
+  où le charleston s'interrompt) et la musique la suit — elle se répète sur
+  un « % », tient l'accord sans s'arrêter sur un break, finit sur un accord
+  après la dernière mesure. Un break d'ouverture se joue seul, juste après
+  les quatre clics du décompte. La tonalité, la grille d'accords de chaque
+  ligne et les motifs des instruments sont tirés d'après le nom du morceau :
+  le Binaire 11 et le Binaire 12 n'ont pas la même musique, et chacun sonne
+  toujours pareil.
+- Le lecteur affiche la structure en petits blocs et la tonalité. Un clic
+  sur un bloc corrige sa mesure (groove, break, mesure répétée) ; la
+  correction est gardée avec le rythme.
+- Longueur calée sur le morceau : les mesures sont comptées sur la
+  partition ; l'accompagnement joue ce nombre de mesures puis s'arrête. La
+  longueur se corrige avec − et +, ou passe en boucle sans fin.
+- Son fort, fait pour passer par-dessus la batterie : compresseur, limiteur
+  et arrondi des crêtes en sortie (pas de saturation). Le clic (décompte,
+  métronome) passe par la même sortie et reste audible par-dessus.
+- Tempo réglable pendant la lecture, mesure de décompte, clic de métronome
+  et volume. « Noter ce tempo » enregistre le tempo joué comme tempo atteint
+  du rythme.
+- Échantillons : banque Musyng Kite (CC BY-SA 3.0), environ 2 Mo, embarqués
+  dans l'app (voir public/sons/CREDITS.md).
+
 ## 1.7.0 — 2026-11-14
 
 ### Ajouté
