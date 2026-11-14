@@ -5,6 +5,16 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.4.0 — 2026-11-14
+
+### Modifié
+
+- Barème de maîtrise d'un rythme : le cran 2 devient « Enchaîné sans erreur »
+  (au lieu de « Joué lentement, sans erreur ») et le cran 4 « Tenu sur la
+  durée » (au lieu de « Fluide et régulier »). Le cran 5 s'appelle simplement
+  « Par cœur ». La vitesse reste notée dans le BPM ; les notes déjà saisies ne
+  changent pas.
+
 ## 1.3.0 — 2026-11-14
 
 ### Ajouté

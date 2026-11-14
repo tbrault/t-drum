@@ -28,14 +28,18 @@ export const STATUTS: Record<
 
 export const STATUT_ORDER: Statut[] = ["a-faire", "en-cours", "acquise"];
 
-/** Barème de maîtrise (index = nombre de pads allumés, 0 à 5). */
+/**
+ * Barème de maîtrise (index = nombre de pads allumés, 0 à 5).
+ * La vitesse est portée par le BPM du rythme : le barème n'en parle pas,
+ * sauf pour le tempo cible de la leçon.
+ */
 export const MAITRISE_NIVEAUX = [
   "Non évalué",
   "Déchiffré",
-  "Joué lentement, sans erreur",
+  "Enchaîné sans erreur",
   "Tempo cible atteint",
-  "Fluide et régulier",
-  "Par cœur / automatique",
+  "Tenu sur la durée",
+  "Par cœur",
 ];
 
 /** Couleur d'accent par volume (pastilles). */
