@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "10-1",
+    titre: "Thème en croches frisées, nuance piano",
     niveau: 10,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-2",
+    titre: "Thème en croches roulées",
     niveau: 10,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-3",
+    titre: "Binaire 19, enchaînement de grooves",
     niveau: 10,
     numero: 3,
     volume: 3,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-4",
+    titre: "Binaire 20, récapitulation rythmes et breaks",
     niveau: 10,
     numero: 4,
     volume: 3,
@@ -75,6 +79,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-5",
+    titre: "Indépendance en 4/4, espace sonore et silences",
     niveau: 10,
     numero: 5,
     volume: 4,
@@ -92,6 +97,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-6",
+    titre: "Thème en triolets frisés, nuance piano",
     niveau: 10,
     numero: 6,
     volume: 2,
@@ -109,6 +115,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-7",
+    titre: "Thème en triolets roulés",
     niveau: 10,
     numero: 7,
     volume: 2,
@@ -126,6 +133,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-8",
+    titre: "Rythmes binaire-ternaire avec deux doigtés",
     niveau: 10,
     numero: 8,
     volume: 3,
@@ -142,6 +150,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-9",
+    titre: "Shuffle-rock, ternaire avec l'énergie du rock",
     niveau: 10,
     numero: 9,
     volume: 3,
@@ -159,6 +168,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-10",
+    titre: "Coordination mains et pieds, breaks en jazz",
     niveau: 10,
     numero: 10,
     volume: 4,
@@ -176,6 +186,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-11",
+    titre: "Solo 13, pièce du niveau",
     niveau: 10,
     numero: 11,
     volume: 4,
@@ -194,6 +205,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-12",
+    titre: "Nuances en triolets roulés",
     niveau: 10,
     numero: 12,
     volume: 2,
@@ -210,6 +222,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-13",
+    titre: "Marche de référence et zones de frappe",
     niveau: 10,
     numero: 13,
     volume: 2,
@@ -227,6 +240,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-14",
+    titre: "Synchronisation des sons en doubles croches",
     niveau: 10,
     numero: 14,
     volume: 3,
@@ -244,6 +258,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "10-15",
+    titre: "Breaks dans les grooves en doubles croches",
     niveau: 10,
     numero: 15,
     volume: 3,
@@ -262,6 +277,6 @@ const lessons: Lesson[] = [
 
 export const niveau10: Niveau = {
   numero: 10,
-  titre: "Croches, triolets, breaks & indépendance jazz",
+  titre: "Thèmes, nuances, grooves, shuffle-rock et jazz",
   lessons,
 };

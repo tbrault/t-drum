@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "18-1",
+    titre: "Débits en frisé, quintolets et septolets",
     niveau: 18,
     numero: 1,
     volume: 2,
@@ -26,6 +27,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-2",
+    titre: "Découverte de la mesure 13/8",
     niveau: 18,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-3",
+    titre: "Lecture à la grosse caisse avec breaks",
     niveau: 18,
     numero: 3,
     volume: 3,
@@ -60,6 +63,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-4",
+    titre: "Phrases clés en ternaire avec chabada",
     niveau: 18,
     numero: 4,
     volume: 4,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-5",
+    titre: "Mélange des débits frisé et roulé",
     niveau: 18,
     numero: 5,
     volume: 2,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-6",
+    titre: "Coordination grosse caisse et cymbales crash",
     niveau: 18,
     numero: 6,
     volume: 3,
@@ -109,6 +115,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-7",
+    titre: "Motifs jazz, grosse caisse et ride",
     niveau: 18,
     numero: 7,
     volume: 4,
@@ -125,6 +132,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-8",
+    titre: "Hommage aux batteurs rock des années 1970",
     niveau: 18,
     numero: 8,
     volume: 3,
@@ -142,6 +150,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-9",
+    titre: "Motifs jazz, mains et pieds aux toms",
     niveau: 18,
     numero: 9,
     volume: 4,
@@ -159,6 +168,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-10",
+    titre: "Rythmes typiques, découverte de la clave",
     niveau: 18,
     numero: 10,
     volume: 2,
@@ -175,6 +185,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-11",
+    titre: "Changements de débit en frisé",
     niveau: 18,
     numero: 11,
     volume: 2,
@@ -191,6 +202,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-12",
+    titre: "Lecture à la grosse caisse en 12/8",
     niveau: 18,
     numero: 12,
     volume: 3,
@@ -209,6 +221,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-13",
+    titre: "Motifs jazz en frisé, accents aux cymbales",
     niveau: 18,
     numero: 13,
     volume: 4,
@@ -226,6 +239,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-14",
+    titre: "Changements de débit en roulé",
     niveau: 18,
     numero: 14,
     volume: 2,
@@ -242,6 +256,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-15",
+    titre: "Marche et rigodon 4, étude du niveau",
     niveau: 18,
     numero: 15,
     volume: 2,
@@ -260,6 +275,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "18-16",
+    titre: "Marche et rigodon 3, étude du niveau",
     niveau: 18,
     numero: 16,
     volume: 2,
@@ -280,6 +296,6 @@ const lessons: Lesson[] = [
 
 export const niveau18: Niveau = {
   numero: 18,
-  titre: "Techniques avancées, indépendance & jeu Jazz",
+  titre: "Frisé, roulé, grosse caisse, jeu jazz et clave",
   lessons,
 };

@@ -5,6 +5,43 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.5.0 — 2026-11-14
+
+### Ajouté
+
+- Parties dans une leçon : des cartes repliables qui regroupent les rythmes
+  (ex. « Page 22 », « Indépendance »). Leur nom se modifie d'un clic, les
+  flèches les montent ou les descendent, et un rythme se glisse d'une partie
+  à l'autre. Les ciseaux d'un rythme coupent la liste à cet endroit : lui et
+  les suivants passent dans une nouvelle partie. Supprimer une partie garde
+  ses rythmes.
+- Statut automatique : « En cours » dès qu'un temps est enregistré,
+  « Validée » quand tous les rythmes atteignent le tempo cible minimal,
+  « Maîtrisée » quand ils atteignent le maximal. Sous le statut, une ligne
+  indique ce qu'il manque pour le suivant. Les rares leçons sans tempo cible
+  gardent un statut à choisir.
+
+- Titres courts pour les 304 leçons et nouveaux titres pour les 17 niveaux :
+  chacun dit ce que la leçon ou le niveau fait travailler (ex. « Accents
+  déplacés en frisé et en roulé »), à la place du texte des objectifs. Un
+  titre personnalisé garde la priorité.
+
+### Modifié
+
+- Page d'une leçon repensée : une barre de séance reste en haut de l'écran
+  (chrono, temps cumulé, ajout de temps, historique, tempo cible), les
+  rythmes prennent la grande colonne, et la vidéo, les consignes et les notes
+  sont rangées sur le côté. Le mot « Pratique » disparaît.
+- Rythmes sur une seule ligne, plus aérés ; le tempo prend la couleur du
+  statut correspondant (ambre sous le tempo minimal, vert au minimal, bleu au
+  maximal).
+- Les champs de saisie n'affichent plus de texte d'aide.
+- L'ancien statut « Acquise » devient « Validée » ou « Maîtrisée » selon les
+  tempos saisis. Les révisions espacées démarrent à la première validation.
+- Couleurs : panneaux et cartes mieux séparés, textes discrets plus lisibles,
+  repère visible sur l'élément actif au clavier.
+- La fenêtre s'ouvre plus large (1320 × 860).
+
 ## 1.4.0 — 2026-11-14
 
 ### Modifié

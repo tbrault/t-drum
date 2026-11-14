@@ -9,32 +9,83 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
+  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Minus, Plus, Trash2 } from "lucide-react";
-import { MAITRISE_NIVEAUX } from "@/lib/meta";
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronRight,
+  GripVertical,
+  ListPlus,
+  Minus,
+  Plus,
+  Scissors,
+  Trash2,
+} from "lucide-react";
+import type { TempoCible } from "@/content/types";
+import { MAITRISE_NIVEAUX, STATUTS } from "@/lib/meta";
 import { cn } from "@/lib/utils";
 import { progressStore } from "@/progress/store";
-import type { Rythme } from "@/progress/types";
+import type { Partie, Rythme } from "@/progress/types";
+import { EditableTitle } from "./EditableTitle";
 import { MaitriseStars } from "./MaitriseStars";
 
 interface Props {
   lessonId: string;
   rythmes: Rythme[];
+  parties?: Partie[];
+  /** Sert à signaler les rythmes qui ont atteint le tempo minimal. */
+  tempoCible?: TempoCible;
 }
+
+/**
+ * Une ligne de la liste. Une partie s'affiche comme une carte, faite de trois
+ * sortes de lignes empilées : son en-tête, ses rythmes, puis son pied.
+ */
+type Item =
+  | {
+      kind: "entete";
+      id: string;
+      partie: Partie;
+      count: number;
+      rang: number;
+      total: number;
+    }
+  | { kind: "pied"; id: string; partie: Partie; vide: boolean }
+  | {
+      kind: "rythme";
+      id: string;
+      rythme: Rythme;
+      dansPartie: boolean;
+      /** Faux pour le premier rythme d'une partie : rien à couper avant lui. */
+      coupable: boolean;
+    };
 
 /** Le glisser-déposer reste vertical : la carte ne part pas sur les côtés. */
 const verticalOnly: Modifier = ({ transform }) => ({ ...transform, x: 0 });
 
+const ICON_BTN =
+  "flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-ink-faint transition-colors";
+const ADD_BTN =
+  "inline-flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink-faint transition-colors hover:border-amber/60 hover:text-amber";
+
 /**
- * Liste éditable des rythmes d'une leçon (libellé + BPM + maîtrise).
- * Les cartes se réordonnent par glisser-déposer via leur poignée.
+ * Liste éditable des rythmes d'une leçon (libellé + BPM + maîtrise), rangés
+ * dans des parties repliables. Un rythme se déplace par glisser-déposer, y
+ * compris d'une partie à l'autre : il appartient à la partie dont l'en-tête
+ * est au-dessus de lui.
  */
-export function RythmeList({ lessonId, rythmes }: Props) {
+export function RythmeList({
+  lessonId,
+  rythmes,
+  parties = [],
+  tempoCible,
+}: Props) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -42,18 +93,68 @@ export function RythmeList({ lessonId, rythmes }: Props) {
     }),
   );
 
+  // Liste à plat, de haut en bas : rythmes hors partie, puis chaque partie
+  // (en-tête, rythmes sauf si elle est repliée, pied).
+  const connues = new Set(parties.map((p) => p.id));
+  const items: Item[] = [
+    ...rythmes
+      .filter((r) => !r.partieId || !connues.has(r.partieId))
+      .map(
+        (rythme): Item => ({
+          kind: "rythme",
+          id: rythme.id,
+          rythme,
+          dansPartie: false,
+          coupable: true,
+        }),
+      ),
+    ...parties.flatMap((partie, rang): Item[] => {
+      const siens = rythmes.filter((r) => r.partieId === partie.id);
+      const entete: Item = {
+        kind: "entete",
+        id: partie.id,
+        partie,
+        count: siens.length,
+        rang,
+        total: parties.length,
+      };
+      if (partie.repliee) return [entete];
+      return [
+        entete,
+        ...siens.map(
+          (rythme, i): Item => ({
+            kind: "rythme",
+            id: rythme.id,
+            rythme,
+            dansPartie: true,
+            coupable: i > 0,
+          }),
+        ),
+        {
+          kind: "pied",
+          id: `${partie.id}:pied`,
+          partie,
+          vide: siens.length === 0,
+        },
+      ];
+    }),
+  ];
+
   function onDragEnd({ active, over }: DragEndEvent) {
-    if (over && active.id !== over.id) {
-      progressStore.moveRythme(lessonId, String(active.id), String(over.id));
-    }
+    if (!over || active.id === over.id) return;
+    const ids = items.map((item) => item.id);
+    const from = ids.indexOf(String(active.id));
+    const to = ids.indexOf(String(over.id));
+    if (from < 0 || to < 0) return;
+    progressStore.reorder(lessonId, arrayMove(ids, from, to));
   }
 
   return (
-    <div className="space-y-3">
-      {rythmes.length === 0 && (
-        <p className="text-sm text-ink-faint">
-          Aucun rythme pour l'instant. Ajoute les rythmes que tu travailles sur
-          la partition.
+    <div>
+      {items.length === 0 && (
+        <p className="mb-4 text-sm text-ink-muted">
+          Aucun rythme pour l'instant. Ajoute tous les rythmes de la partition
+          dès le début : le statut de la leçon se calcule à partir d'eux.
         </p>
       )}
 
@@ -63,28 +164,201 @@ export function RythmeList({ lessonId, rythmes }: Props) {
         modifiers={[verticalOnly]}
         onDragEnd={onDragEnd}
       >
-        <SortableContext items={rythmes} strategy={verticalListSortingStrategy}>
-          {rythmes.map((rythme) => (
-            <RythmeRow key={rythme.id} lessonId={lessonId} rythme={rythme} />
-          ))}
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
+          {items.map((item, i) => {
+            if (item.kind === "entete") {
+              return (
+                <PartieEntete
+                  key={item.id}
+                  lessonId={lessonId}
+                  item={item}
+                  premier={i === 0}
+                />
+              );
+            }
+            if (item.kind === "pied") {
+              return (
+                <PartiePied key={item.id} lessonId={lessonId} item={item} />
+              );
+            }
+            return (
+              <RythmeRow
+                key={item.id}
+                lessonId={lessonId}
+                item={item}
+                premier={i === 0}
+                tempoCible={tempoCible}
+              />
+            );
+          })}
         </SortableContext>
       </DndContext>
 
+      <div className={cn("flex flex-wrap gap-2", items.length > 0 && "mt-5")}>
+        {/* Avec des parties, on ajoute un rythme depuis le pied de sa partie. */}
+        {parties.length === 0 && (
+          <button
+            type="button"
+            onClick={() => progressStore.addRythme(lessonId)}
+            className={ADD_BTN}
+          >
+            <Plus className="h-3.5 w-3.5" /> Ajouter un rythme
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => progressStore.addPartie(lessonId)}
+          className={ADD_BTN}
+        >
+          <ListPlus className="h-3.5 w-3.5" /> Ajouter une partie
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** En-tête d'une carte de partie : repli, nom, ordre et suppression. */
+function PartieEntete({
+  lessonId,
+  item,
+  premier,
+}: {
+  lessonId: string;
+  item: Extract<Item, { kind: "entete" }>;
+  premier: boolean;
+}) {
+  const { partie, count, rang, total } = item;
+  const update = (patch: Partial<Omit<Partie, "id">>) =>
+    progressStore.updatePartie(lessonId, partie.id, patch);
+  // Ne se saisit pas, mais se décale pour laisser passer un rythme.
+  const { setNodeRef, transform, transition } = useSortable({
+    id: item.id,
+    disabled: { draggable: true },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={cn(
+        "flex items-center gap-2 border border-line bg-raised px-3 py-2.5",
+        partie.repliee ? "rounded-xl" : "rounded-t-xl",
+        !premier && "mt-5",
+      )}
+    >
       <button
         type="button"
-        onClick={() => progressStore.addRythme(lessonId)}
-        className="inline-flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink-faint transition-colors hover:border-amber/60 hover:text-amber"
+        aria-label={partie.repliee ? "Déplier la partie" : "Replier la partie"}
+        aria-expanded={!partie.repliee}
+        onClick={() => update({ repliee: !partie.repliee })}
+        className={cn(ICON_BTN, "hover:text-amber")}
       >
-        <Plus className="h-3.5 w-3.5" /> Ajouter un rythme
+        <ChevronRight
+          className={cn(
+            "h-4 w-4 transition-transform",
+            !partie.repliee && "rotate-90",
+          )}
+        />
+      </button>
+
+      <div className="min-w-0 flex-1">
+        <EditableTitle
+          value={partie.titre}
+          onSave={(titre) => update({ titre })}
+          className="font-display text-base font-bold text-ink [&>span]:truncate"
+        />
+      </div>
+
+      <span className="shrink-0 px-2 font-mono text-xs text-ink-muted tabular-nums">
+        {count} rythme{count > 1 ? "s" : ""}
+      </span>
+
+      {rang > 0 && (
+        <button
+          type="button"
+          aria-label="Monter la partie"
+          title="Monter la partie"
+          onClick={() => progressStore.movePartie(lessonId, partie.id, -1)}
+          className={cn(ICON_BTN, "hover:text-amber")}
+        >
+          <ArrowUp className="h-4 w-4" />
+        </button>
+      )}
+      {rang < total - 1 && (
+        <button
+          type="button"
+          aria-label="Descendre la partie"
+          title="Descendre la partie"
+          onClick={() => progressStore.movePartie(lessonId, partie.id, 1)}
+          className={cn(ICON_BTN, "hover:text-amber")}
+        >
+          <ArrowDown className="h-4 w-4" />
+        </button>
+      )}
+      <button
+        type="button"
+        aria-label="Supprimer la partie"
+        title="Supprimer la partie (ses rythmes sont gardés)"
+        onClick={() => progressStore.removePartie(lessonId, partie.id)}
+        className={cn(ICON_BTN, "hover:text-vol4")}
+      >
+        <Trash2 className="h-4 w-4" />
       </button>
     </div>
   );
 }
 
-function RythmeRow({ lessonId, rythme }: { lessonId: string; rythme: Rythme }) {
+/** Pied d'une carte de partie : ferme la carte et ajoute un rythme dedans. */
+function PartiePied({
+  lessonId,
+  item,
+}: {
+  lessonId: string;
+  item: Extract<Item, { kind: "pied" }>;
+}) {
+  const { setNodeRef, transform, transition } = useSortable({
+    id: item.id,
+    disabled: { draggable: true },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className="flex flex-wrap items-center gap-3 rounded-b-xl border-x border-b border-line bg-panel px-4 py-3"
+    >
+      <button
+        type="button"
+        onClick={() => progressStore.addRythme(lessonId, item.partie.id)}
+        className={ADD_BTN}
+      >
+        <Plus className="h-3.5 w-3.5" /> Ajouter un rythme
+      </button>
+      {item.vide && (
+        <span className="text-sm text-ink-faint">
+          Partie vide : ajoute un rythme ou glisses-en un ici.
+        </span>
+      )}
+    </div>
+  );
+}
+
+function RythmeRow({
+  lessonId,
+  item,
+  premier,
+  tempoCible,
+}: {
+  lessonId: string;
+  item: Extract<Item, { kind: "rythme" }>;
+  premier: boolean;
+  tempoCible?: TempoCible;
+}) {
+  const { rythme, dansPartie, coupable } = item;
   const update = (patch: Partial<Omit<Rythme, "id">>) =>
     progressStore.updateRythme(lessonId, rythme.id, patch);
   const bpm = rythme.bpm ?? 0;
+  const palier = palierTempo(bpm, tempoCible);
   const {
     attributes,
     listeners,
@@ -96,88 +370,150 @@ function RythmeRow({ lessonId, rythme }: { lessonId: string; rythme: Rythme }) {
   } = useSortable({ id: rythme.id });
 
   return (
+    // L'enveloppe prolonge la carte de la partie ; la ligne est à l'intérieur.
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        "space-y-3 rounded-lg border border-line bg-base/60 p-3",
-        isDragging && "relative z-10 border-amber/60 bg-base shadow-xl",
+        dansPartie
+          ? "border-x border-line bg-panel px-4 pt-3"
+          : !premier && "pt-3",
+        isDragging && "relative z-10",
       )}
     >
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          ref={setActivatorNodeRef}
-          aria-label="Déplacer ce rythme"
-          className={cn(
-            "flex h-8 w-6 shrink-0 touch-none items-center justify-center rounded-md text-ink-faint transition-colors hover:text-amber",
-            isDragging ? "cursor-grabbing text-amber" : "cursor-grab",
-          )}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="h-4 w-4" />
-        </button>
-        <input
-          value={rythme.libelle}
-          onChange={(e) => update({ libelle: e.target.value })}
-          placeholder="Nom du rythme (ex. binaire 10, p.22 n°3)"
-          className="min-w-0 flex-1 rounded-md border border-line bg-panel px-2.5 py-1.5 text-sm text-ink placeholder:text-ink-faint focus:border-amber/60 focus:outline-none"
-        />
-        <button
-          type="button"
-          aria-label="Supprimer ce rythme"
-          onClick={() => progressStore.removeRythme(lessonId, rythme.id)}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-ink-faint transition-colors hover:text-vol4"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        {/* BPM */}
-        <div className="flex items-center gap-1.5">
-          <StepBtn onClick={() => update({ bpm: Math.max(0, bpm - 5) })}>
-            <Minus className="h-3.5 w-3.5" />
-          </StepBtn>
-          <span className="min-w-[3.5rem] text-center font-mono text-sm text-ink tabular-nums">
-            {bpm}
-            <span className="ml-0.5 text-xs text-ink-faint">bpm</span>
-          </span>
-          <StepBtn onClick={() => update({ bpm: bpm + 5 })}>
-            <Plus className="h-3.5 w-3.5" />
-          </StepBtn>
+      <div
+        className={cn(
+          "group/rythme flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border px-3 py-3.5",
+          dansPartie ? "border-line-soft bg-base" : "border-line bg-panel",
+          isDragging && "border-amber/60 shadow-xl",
+        )}
+      >
+        <div className="flex min-w-[11rem] flex-1 items-center gap-2">
+          <button
+            type="button"
+            ref={setActivatorNodeRef}
+            aria-label="Déplacer ce rythme"
+            className={cn(
+              ICON_BTN,
+              "w-6 touch-none hover:text-amber",
+              isDragging ? "cursor-grabbing text-amber" : "cursor-grab",
+            )}
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-4 w-4" />
+          </button>
+          <input
+            value={rythme.libelle}
+            onChange={(e) => update({ libelle: e.target.value })}
+            aria-label="Nom du rythme"
+            className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-2 py-1.5 font-medium text-ink hover:border-line focus:border-amber/60 focus:bg-panel focus:outline-none"
+          />
         </div>
 
-        {/* Maîtrise */}
-        <div className="flex items-center gap-2.5">
-          <MaitriseStars
-            value={rythme.maitrise}
-            onChange={(maitrise) => update({ maitrise })}
-          />
-          <span className="font-mono text-[11px] text-ink-muted">
-            {MAITRISE_NIVEAUX[rythme.maitrise]}
-          </span>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+          {/* BPM */}
+          <div className="flex items-center gap-2">
+            <StepBtn
+              label="Baisser le tempo de 5"
+              onClick={() => update({ bpm: Math.max(0, bpm - 5) })}
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </StepBtn>
+            <span
+              title={palier.titre}
+              className={cn(
+                "min-w-[4.25rem] text-center font-mono text-base tabular-nums",
+                palier.couleur,
+              )}
+            >
+              {bpm}
+              <span className="ml-1 text-xs text-ink-faint">bpm</span>
+            </span>
+            <StepBtn
+              label="Monter le tempo de 5"
+              onClick={() => update({ bpm: bpm + 5 })}
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </StepBtn>
+          </div>
+
+          {/* Maîtrise */}
+          <div className="flex w-[16.5rem] items-center gap-3">
+            <MaitriseStars
+              value={rythme.maitrise}
+              onChange={(maitrise) => update({ maitrise })}
+            />
+            <span className="truncate font-mono text-xs text-ink-muted">
+              {MAITRISE_NIVEAUX[rythme.maitrise]}
+            </span>
+          </div>
+
+          {/* Largeur fixe : les colonnes restent alignées d'une ligne à l'autre. */}
+          <div className="flex w-16 items-center justify-end">
+            {coupable && (
+              <button
+                type="button"
+                aria-label="Couper ici en une nouvelle partie"
+                title="Couper ici : ce rythme et les suivants passent dans une nouvelle partie"
+                onClick={() => progressStore.splitPartie(lessonId, rythme.id)}
+                className={cn(
+                  ICON_BTN,
+                  "opacity-0 hover:text-amber focus-visible:opacity-100 group-hover/rythme:opacity-100",
+                )}
+              >
+                <Scissors className="h-4 w-4" />
+              </button>
+            )}
+            <button
+              type="button"
+              aria-label="Supprimer ce rythme"
+              onClick={() => progressStore.removeRythme(lessonId, rythme.id)}
+              className={cn(ICON_BTN, "hover:text-vol4")}
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
+/**
+ * Couleur du tempo d'un rythme : celle du statut que la leçon aurait si tous
+ * ses rythmes étaient à ce tempo (en cours, validée, maîtrisée).
+ */
+function palierTempo(
+  bpm: number,
+  cible?: TempoCible,
+): { couleur: string; titre?: string } {
+  if (!cible || bpm <= 0) return { couleur: "text-ink" };
+  if (bpm >= cible.max)
+    return { couleur: STATUTS.maitrisee.color, titre: "Tempo maximal atteint" };
+  if (bpm >= cible.min)
+    return { couleur: STATUTS.validee.color, titre: "Tempo minimal atteint" };
+  return {
+    couleur: STATUTS["en-cours"].color,
+    titre: "Sous le tempo minimal",
+  };
+}
+
 function StepBtn({
+  label,
   onClick,
   children,
 }: {
+  label: string;
   onClick: () => void;
   children: React.ReactNode;
 }) {
   return (
     <button
       type="button"
+      aria-label={label}
       onClick={onClick}
-      className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised text-ink-muted transition-colors hover:border-amber/60 hover:text-amber active:scale-95",
-      )}
+      className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised text-ink-muted transition-colors hover:border-amber/60 hover:text-amber active:scale-95"
     >
       {children}
     </button>

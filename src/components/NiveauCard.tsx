@@ -23,7 +23,7 @@ export function NiveauCard({ niveau, titre, stats, onOpen }: Props) {
       disabled={locked}
       onClick={() => onOpen(niveau.numero)}
       className={cn(
-        "group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-line bg-panel/80 p-5 text-left backdrop-blur transition-all",
+        "group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-line bg-panel p-5 text-left transition-all",
         locked
           ? "cursor-not-allowed opacity-45"
           : "hover:-translate-y-0.5 hover:border-amber/50 hover:shadow-[0_8px_30px_-12px_var(--color-amber)]",

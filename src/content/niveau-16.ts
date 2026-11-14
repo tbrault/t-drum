@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "16-1",
+    titre: "Précision rythmique en frisé et en roulé",
     niveau: 16,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-2",
+    titre: "Breaks en débit binaire et ternaire",
     niveau: 16,
     numero: 2,
     volume: 3,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-3",
+    titre: "Frisé et roulé, sextolets et triples croches",
     niveau: 16,
     numero: 3,
     volume: 2,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-4",
+    titre: "Doubles croches à la charleston et breaks",
     niveau: 16,
     numero: 4,
     volume: 3,
@@ -77,6 +81,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-5",
+    titre: "Lecture d'un thème en 9/8 binaire",
     niveau: 16,
     numero: 5,
     volume: 2,
@@ -94,6 +99,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-6",
+    titre: "Indépendance en valse jazz à la ride — p. 76",
     niveau: 16,
     numero: 6,
     volume: 4,
@@ -112,6 +118,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-7",
+    titre: "Accents et frisé en sextolets",
     niveau: 16,
     numero: 7,
     volume: 2,
@@ -130,6 +137,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-8",
+    titre: "Binaire 39, breaks avec sextolets",
     niveau: 16,
     numero: 8,
     volume: 3,
@@ -148,6 +156,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-9",
+    titre: "Indépendance en valse jazz à la ride — p. 77",
     niveau: 16,
     numero: 9,
     volume: 4,
@@ -166,6 +175,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-10",
+    titre: "Accents et frisé en triples croches",
     niveau: 16,
     numero: 10,
     volume: 2,
@@ -184,6 +194,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-11",
+    titre: "Lecture d'un thème en 11/8",
     niveau: 16,
     numero: 11,
     volume: 2,
@@ -200,6 +211,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-12",
+    titre: "Groove et indépendance sur rythmes modernes",
     niveau: 16,
     numero: 12,
     volume: 3,
@@ -218,6 +230,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-13",
+    titre: "Solo 18 en 3 temps, première page",
     niveau: 16,
     numero: 13,
     volume: 4,
@@ -236,6 +249,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-14",
+    titre: "Solo 18 en 3 temps, deuxième page",
     niveau: 16,
     numero: 14,
     volume: 4,
@@ -254,6 +268,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-15",
+    titre: "Marche, étude du niveau — p. 172",
     niveau: 16,
     numero: 15,
     volume: 2,
@@ -271,6 +286,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "16-16",
+    titre: "Binaire 42, pièce du niveau",
     niveau: 16,
     numero: 16,
     volume: 3,
@@ -291,6 +307,6 @@ const lessons: Lesson[] = [
 
 export const niveau16: Niveau = {
   numero: 16,
-  titre: "Technique avancée, indépendance ternaire & mesures composées",
+  titre: "Frisé, sextolets, breaks, 11/8 et valse jazz",
   lessons,
 };

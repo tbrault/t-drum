@@ -4,29 +4,46 @@ import type { Statut } from "@/progress/types";
 /** Libellés et couleurs des statuts (tokens définis dans index.css). */
 export const STATUTS: Record<
   Statut,
-  { label: string; short: string; color: string; dot: string }
+  {
+    label: string;
+    color: string;
+    dot: string;
+    /** Style de la pastille, ou du bouton quand ce statut est choisi. */
+    active: string;
+  }
 > = {
   "a-faire": {
     label: "À faire",
-    short: "TODO",
     color: "text-todo",
     dot: "bg-todo",
+    active: "bg-raised text-ink ring-1 ring-inset ring-ink-faint",
   },
   "en-cours": {
     label: "En cours",
-    short: "WIP",
     color: "text-wip",
     dot: "bg-wip",
+    active: "bg-wip/15 text-wip ring-1 ring-inset ring-wip/70",
   },
-  acquise: {
-    label: "Acquise",
-    short: "OK",
+  validee: {
+    label: "Validée",
     color: "text-done",
     dot: "bg-done",
+    active: "bg-done/15 text-done ring-1 ring-inset ring-done/70",
+  },
+  maitrisee: {
+    label: "Maîtrisée",
+    color: "text-master",
+    dot: "bg-master",
+    active: "bg-master/15 text-master ring-1 ring-inset ring-master/70",
   },
 };
 
-export const STATUT_ORDER: Statut[] = ["a-faire", "en-cours", "acquise"];
+export const STATUT_ORDER: Statut[] = [
+  "a-faire",
+  "en-cours",
+  "validee",
+  "maitrisee",
+];
 
 /**
  * Barème de maîtrise (index = nombre de pads allumés, 0 à 5).

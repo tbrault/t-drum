@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "7-4",
+    titre: "Doubles croches à la charleston et breaks",
     niveau: 7,
     numero: 4,
     volume: 3,
@@ -26,6 +27,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-5",
+    titre: "Accents déplacés en frisé et en roulé",
     niveau: 7,
     numero: 5,
     volume: 2,
@@ -43,6 +45,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-6",
+    titre: "Technique de grosse caisse et nouveaux rythmes",
     niveau: 7,
     numero: 6,
     volume: 3,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-8",
+    titre: "Accents, notes fantômes et « ra » en frisé",
     niveau: 7,
     numero: 8,
     volume: 2,
@@ -77,6 +81,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-9",
+    titre: "Changement de sonorités et binaire 10",
     niveau: 7,
     numero: 9,
     volume: 3,
@@ -95,6 +100,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-11",
+    titre: "Solo 3, indépendance et breaks ternaires",
     niveau: 7,
     numero: 11,
     volume: 4,
@@ -113,6 +119,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-12",
+    titre: "Indépendance à la grosse caisse sur chabada",
     niveau: 7,
     numero: 12,
     volume: 4,
@@ -130,6 +137,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-13",
+    titre: "Grosse caisse et indépendance binaire en rock",
     niveau: 7,
     numero: 13,
     volume: 3,
@@ -148,6 +156,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-14",
+    titre: "Coordination des 3 sons — p. 26 et 27",
     niveau: 7,
     numero: 14,
     volume: 3,
@@ -164,6 +173,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-15",
+    titre: "Coordination des 3 sons — p. 28 et 29",
     niveau: 7,
     numero: 15,
     volume: 3,
@@ -182,6 +192,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-16",
+    titre: "Solo 4, indépendance des 4 membres",
     niveau: 7,
     numero: 16,
     volume: 4,
@@ -199,6 +210,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-17",
+    titre: "Solo 4, indépendance des 4 membres (suite)",
     niveau: 7,
     numero: 17,
     volume: 4,
@@ -216,6 +228,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-18",
+    titre: "Solo 4, indépendance des 4 membres (fin)",
     niveau: 7,
     numero: 18,
     volume: 4,
@@ -233,6 +246,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-19",
+    titre: "Silences et breaks plus complexes",
     niveau: 7,
     numero: 19,
     volume: 3,
@@ -251,6 +265,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-20",
+    titre: "Binaire p. 31, mise en application",
     niveau: 7,
     numero: 20,
     volume: 3,
@@ -268,6 +283,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-21",
+    titre: "Binaire p. 31, mise en application (suite)",
     niveau: 7,
     numero: 21,
     volume: 3,
@@ -285,6 +301,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-22",
+    titre: "Breaks aux sons variés sur chabada",
     niveau: 7,
     numero: 22,
     volume: 4,
@@ -303,6 +320,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "7-23",
+    titre: "Solo 6, indépendance des 4 membres",
     niveau: 7,
     numero: 23,
     volume: 4,
@@ -323,6 +341,6 @@ const lessons: Lesson[] = [
 
 export const niveau07: Niveau = {
   numero: 7,
-  titre: "Doubles croches, indépendance & breaks",
+  titre: "Accents, grosse caisse, indépendance et breaks",
   lessons,
 };

@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "23-1",
+    titre: "Pièce de caisse claire — lignes 1 à 6",
     niveau: 23,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-2",
+    titre: "Vocabulaire ternaire en 3 temps avec ostinato",
     niveau: 23,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-3",
+    titre: "Valse jazz, indépendance ternaire en 3 temps",
     niveau: 23,
     numero: 3,
     volume: 2,
@@ -60,6 +63,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-4",
+    titre: "Vocabulaire ternaire en 3 temps, croches piano",
     niveau: 23,
     numero: 4,
     volume: 2,
@@ -78,6 +82,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-5",
+    titre: "Vocabulaire ternaire en 3 temps, remplissage piano",
     niveau: 23,
     numero: 5,
     volume: 2,
@@ -96,6 +101,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-6",
+    titre: "Durées de notes d'un tutti de cuivres",
     niveau: 23,
     numero: 6,
     volume: 2,
@@ -112,6 +118,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-7",
+    titre: "Solo hommage à Dave Weckl — début",
     niveau: 23,
     numero: 7,
     volume: 3,
@@ -129,6 +136,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-8",
+    titre: "Solo 21, indépendance ternaire — p. 96",
     niveau: 23,
     numero: 8,
     volume: 4,
@@ -147,6 +155,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-9",
+    titre: "Pièce de caisse claire — lignes 7 à 12",
     niveau: 23,
     numero: 9,
     volume: 2,
@@ -164,6 +173,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-10",
+    titre: "Solo hommage à Dave Weckl — 4e ligne",
     niveau: 23,
     numero: 10,
     volume: 3,
@@ -181,6 +191,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-11",
+    titre: "Solo 21, indépendance ternaire — p. 97",
     niveau: 23,
     numero: 11,
     volume: 4,
@@ -199,6 +210,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-12",
+    titre: "Figures syncopées complexes en 3 temps",
     niveau: 23,
     numero: 12,
     volume: 4,
@@ -216,6 +228,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-13",
+    titre: "Valse jazz, phrases syncopées plus complexes",
     niveau: 23,
     numero: 13,
     volume: 4,
@@ -234,6 +247,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-14",
+    titre: "Tutti de cuivres, figures plus complexes",
     niveau: 23,
     numero: 14,
     volume: 4,
@@ -250,6 +264,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-15",
+    titre: "Coordination mains/pieds en hard bop",
     niveau: 23,
     numero: 15,
     volume: 4,
@@ -267,6 +282,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-16",
+    titre: "Roulé mains/pieds en hard bop",
     niveau: 23,
     numero: 16,
     volume: 4,
@@ -285,6 +301,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-17",
+    titre: "Pièce de caisse claire — lignes 13 à 18",
     niveau: 23,
     numero: 17,
     volume: 2,
@@ -302,6 +319,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-18",
+    titre: "Chabada binaire et 4/4 en hard bop",
     niveau: 23,
     numero: 18,
     volume: 4,
@@ -319,6 +337,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-19",
+    titre: "Triptyque hard bop en C barré — p. 115 à 119",
     niveau: 23,
     numero: 19,
     volume: 4,
@@ -335,6 +354,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "23-20",
+    titre: "Pièce de caisse claire — lignes 19 à 24",
     niveau: 23,
     numero: 20,
     volume: 2,
@@ -354,6 +374,6 @@ const lessons: Lesson[] = [
 
 export const niveau23: Niveau = {
   numero: 23,
-  titre: "Solos ternaires, hard bop & caisse claire",
+  titre: "Caisse claire, valse jazz, solos et hard bop",
   lessons,
 };

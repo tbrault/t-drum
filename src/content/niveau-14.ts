@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "14-1",
+    titre: "Frisé de 4 en débit de croches",
     niveau: 14,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-2",
+    titre: "Moulin à la batterie dans les grooves",
     niveau: 14,
     numero: 2,
     volume: 3,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-3",
+    titre: "Binaire 33, moulin dans rythmes et breaks",
     niveau: 14,
     numero: 3,
     volume: 3,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-4",
+    titre: "Big band, remplissage en triolets frisés",
     niveau: 14,
     numero: 4,
     volume: 4,
@@ -77,6 +81,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-5",
+    titre: "Frisé de 4 en débit de triolets",
     niveau: 14,
     numero: 5,
     volume: 2,
@@ -94,6 +99,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-6",
+    titre: "Moulin II appliqué à la batterie",
     niveau: 14,
     numero: 6,
     volume: 3,
@@ -111,6 +117,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-7",
+    titre: "Big band, remplissage en triolets roulés",
     niveau: 14,
     numero: 7,
     volume: 4,
@@ -129,6 +136,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-8",
+    titre: "Accents fla dans un débit de croches",
     niveau: 14,
     numero: 8,
     volume: 2,
@@ -146,6 +154,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-9",
+    titre: "Lecture en mesure 5/8",
     niveau: 14,
     numero: 9,
     volume: 2,
@@ -163,6 +172,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-10",
+    titre: "Indépendance binaire, battements variés",
     niveau: 14,
     numero: 10,
     volume: 3,
@@ -181,6 +191,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-11",
+    titre: "Big band, jeu des annonces",
     niveau: 14,
     numero: 11,
     volume: 4,
@@ -198,6 +209,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-12",
+    titre: "Accents fla dans un débit de triolets",
     niveau: 14,
     numero: 12,
     volume: 2,
@@ -215,6 +227,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-13",
+    titre: "Indépendance binaire, rythmes enchaînés",
     niveau: 14,
     numero: 13,
     volume: 3,
@@ -233,6 +246,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-14",
+    titre: "Indépendance ternaire en valse jazz",
     niveau: 14,
     numero: 14,
     volume: 4,
@@ -250,6 +264,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-15",
+    titre: "Frisé avec changements de débit",
     niveau: 14,
     numero: 15,
     volume: 2,
@@ -266,6 +281,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-16",
+    titre: "Crash et grosse caisse dans les breaks",
     niveau: 14,
     numero: 16,
     volume: 3,
@@ -283,6 +299,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-17",
+    titre: "Binaire 36, application des leçons précédentes",
     niveau: 14,
     numero: 17,
     volume: 3,
@@ -300,6 +317,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "14-18",
+    titre: "Frisé, changements de débit et nuances",
     niveau: 14,
     numero: 18,
     volume: 2,
@@ -319,6 +337,6 @@ const lessons: Lesson[] = [
 
 export const niveau14: Niveau = {
   numero: 14,
-  titre: "Frisé, moulin, fla & indépendance",
+  titre: "Frisé de 4, moulin, fla, big band et indépendance",
   lessons,
 };

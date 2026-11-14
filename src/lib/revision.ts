@@ -1,5 +1,6 @@
 import type { LessonProgress } from "@/progress/types";
 import { addDaysISO, diffDays, todayISO } from "./dates";
+import { estAcquise } from "./statut";
 
 /** Intervalles de répétition espacée, en jours. */
 export const REVISION_INTERVALS = [7, 21, 60, 120, 240];
@@ -12,7 +13,7 @@ export function intervalForStep(step: number): number {
 
 /** Date d'échéance de la prochaine révision (ISO), ou null si pas de suivi. */
 export function nextDueISO(progress: LessonProgress): string | null {
-  if (progress.statut !== "acquise" || !progress.revision) return null;
+  if (!estAcquise(progress.statut) || !progress.revision) return null;
   return addDaysISO(
     progress.revision.lastReviewed,
     intervalForStep(progress.revision.step),

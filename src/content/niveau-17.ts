@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "17-1",
+    titre: "Découverte de la mesure 2/2",
     niveau: 17,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-2",
+    titre: "Indépendance en jazz binaire — p. 80 et 81",
     niveau: 17,
     numero: 2,
     volume: 4,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-3",
+    titre: "Frisé en mesure 2/2",
     niveau: 17,
     numero: 3,
     volume: 2,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-4",
+    titre: "Indépendance en jazz binaire — p. 82",
     niveau: 17,
     numero: 4,
     volume: 4,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-5",
+    titre: "Roulé en mesure 2/2",
     niveau: 17,
     numero: 5,
     volume: 2,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-6",
+    titre: "Binaire 43, pièce du niveau — première page",
     niveau: 17,
     numero: 6,
     volume: 3,
@@ -111,6 +117,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-7",
+    titre: "Interprétation d'un thème en chabada binaire",
     niveau: 17,
     numero: 7,
     volume: 4,
@@ -129,6 +136,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-8",
+    titre: "Chant cymbale ou cloche en mesure 2/2",
     niveau: 17,
     numero: 8,
     volume: 2,
@@ -146,6 +154,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-9",
+    titre: "Binaire 43, pièce du niveau — deuxième page",
     niveau: 17,
     numero: 9,
     volume: 3,
@@ -164,6 +173,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-10",
+    titre: "Coordination en C barré, jazz binaire",
     niveau: 17,
     numero: 10,
     volume: 4,
@@ -182,6 +192,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-11",
+    titre: "Marche ternaire en 6/8, frisé et roulé",
     niveau: 17,
     numero: 11,
     volume: 2,
@@ -200,6 +211,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-12",
+    titre: "Rythmes en 3/4 et binaire 44",
     niveau: 17,
     numero: 12,
     volume: 3,
@@ -217,6 +229,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-13",
+    titre: "Solo 19 en C barré, jazz binaire",
     niveau: 17,
     numero: 13,
     volume: 4,
@@ -234,6 +247,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-14",
+    titre: "Marche, étude du niveau — p. 172",
     niveau: 17,
     numero: 14,
     volume: 2,
@@ -251,6 +265,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-15",
+    titre: "Binaire 45, coordination et synchronisation",
     niveau: 17,
     numero: 15,
     volume: 3,
@@ -269,6 +284,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-16",
+    titre: "Solo 20, pièce du niveau",
     niveau: 17,
     numero: 16,
     volume: 4,
@@ -287,6 +303,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "17-17",
+    titre: "Binaire 46, indépendance des membres",
     niveau: 17,
     numero: 17,
     volume: 3,
@@ -307,6 +324,6 @@ const lessons: Lesson[] = [
 
 export const niveau17: Niveau = {
   numero: 17,
-  titre: "Mesure 2/2, jazz binaire & coordination ternaire",
+  titre: "Mesure 2/2, jazz binaire, groove et coordination",
   lessons,
 };

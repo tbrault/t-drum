@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "15-1",
+    titre: "Accents en fla dans un débit frisé",
     niveau: 15,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-2",
+    titre: "Lecture d'un thème en 7/8",
     niveau: 15,
     numero: 2,
     volume: 2,
@@ -40,6 +42,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-3",
+    titre: "Doubles croches de la même main",
     niveau: 15,
     numero: 3,
     volume: 3,
@@ -58,6 +61,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-4",
+    titre: "Frisé de 3 en doubles croches",
     niveau: 15,
     numero: 4,
     volume: 2,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-5",
+    titre: "Frisé de 4 en doubles croches",
     niveau: 15,
     numero: 5,
     volume: 2,
@@ -94,6 +99,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-6",
+    titre: "Indépendance ternaire en valse jazz",
     niveau: 15,
     numero: 6,
     volume: 4,
@@ -111,6 +117,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-7",
+    titre: "Frisé en notes fantômes, accents et roulé",
     niveau: 15,
     numero: 7,
     volume: 2,
@@ -129,6 +136,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-8",
+    titre: "Solo binaire de Steve Gadd — p. 88",
     niveau: 15,
     numero: 8,
     volume: 3,
@@ -145,6 +153,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-9",
+    titre: "Solo binaire de Steve Gadd — p. 89",
     niveau: 15,
     numero: 9,
     volume: 3,
@@ -161,6 +170,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-10",
+    titre: "Breaks ternaires en valse jazz — p. 72",
     niveau: 15,
     numero: 10,
     volume: 4,
@@ -179,6 +189,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-11",
+    titre: "Breaks ternaires en valse jazz — p. 73",
     niveau: 15,
     numero: 11,
     volume: 4,
@@ -197,6 +208,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-12",
+    titre: "Frisé, accents et roulé ternaire",
     niveau: 15,
     numero: 12,
     volume: 2,
@@ -215,6 +227,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-13",
+    titre: "Frisé, accents et roulé binaire",
     niveau: 15,
     numero: 13,
     volume: 2,
@@ -233,6 +246,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-14",
+    titre: "Solo 17 en 3 temps, première page",
     niveau: 15,
     numero: 14,
     volume: 4,
@@ -251,6 +265,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-15",
+    titre: "Solo 17 en 3 temps, deuxième page",
     niveau: 15,
     numero: 15,
     volume: 4,
@@ -269,6 +284,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-16",
+    titre: "Préparation à la marche de Steve Gadd",
     niveau: 15,
     numero: 16,
     volume: 2,
@@ -287,6 +303,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "15-17",
+    titre: "Marche de Steve Gadd, technique de caisse",
     niveau: 15,
     numero: 17,
     volume: 2,
@@ -305,6 +322,6 @@ const lessons: Lesson[] = [
 
 export const niveau15: Niveau = {
   numero: 15,
-  titre: "Technique de caisse, indépendance ternaire & valse Jazz",
+  titre: "Fla, frisé, roulé, valse jazz et Steve Gadd",
   lessons,
 };

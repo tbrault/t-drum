@@ -41,7 +41,7 @@ export function Dashboard({
           <button
             type="button"
             onClick={onOpenCalendar}
-            className="inline-flex items-center gap-2 rounded-lg border border-line bg-panel/70 px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:border-amber/60 hover:text-amber"
+            className="inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:border-amber/60 hover:text-amber"
           >
             <CalendarDays className="h-4 w-4" /> Calendrier
           </button>
@@ -51,7 +51,7 @@ export function Dashboard({
           volumes.
         </p>
 
-        <div className="mt-7 rounded-2xl border border-line bg-panel/70 p-6 backdrop-blur">
+        <div className="mt-7 rounded-2xl border border-line bg-panel p-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex items-baseline gap-6">
               <Stat value={String(global.acquises)} label="acquises" />

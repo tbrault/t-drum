@@ -9,7 +9,7 @@ interface Props {
 /** Maîtrise 0-5 façon pads de boîte à rythmes. Lecture seule si pas d'onChange. */
 export function MaitriseStars({ value, onChange, size = "sm" }: Props) {
   const interactive = Boolean(onChange);
-  const pad = size === "lg" ? "h-6 w-6" : "h-3 w-3";
+  const pad = size === "lg" ? "h-6 w-6" : "h-4 w-4";
 
   const padClass = (filled: boolean) =>
     cn(
@@ -17,7 +17,7 @@ export function MaitriseStars({ value, onChange, size = "sm" }: Props) {
       pad,
       filled
         ? "border-amber bg-amber shadow-[0_0_10px_-2px_var(--color-amber)]"
-        : "border-line bg-transparent",
+        : "border-ink-faint/60 bg-transparent",
       interactive && "cursor-pointer hover:border-amber-bright active:scale-90",
     );
 

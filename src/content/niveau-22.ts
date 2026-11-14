@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "22-1",
+    titre: "Frisé, roulé et indépendance en musique latine",
     niveau: 22,
     numero: 1,
     volume: 2,
@@ -26,6 +27,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-2",
+    titre: "Déchiffrage d'une partition de big band",
     niveau: 22,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-3",
+    titre: "Indépendance latin-jazz, 3 interprétations",
     niveau: 22,
     numero: 3,
     volume: 2,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-4",
+    titre: "Breaks en triples croches",
     niveau: 22,
     numero: 4,
     volume: 3,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-5",
+    titre: "Jeu dans le style du jazz moderne",
     niveau: 22,
     numero: 5,
     volume: 4,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-6",
+    titre: "Thème en doubles croches, frisé puis roulé",
     niveau: 22,
     numero: 6,
     volume: 2,
@@ -110,6 +116,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-7",
+    titre: "Solo hommage à Steve Gadd — première partie",
     niveau: 22,
     numero: 7,
     volume: 3,
@@ -128,6 +135,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-8",
+    titre: "Breaks ternaires mains et pieds, novolets",
     niveau: 22,
     numero: 8,
     volume: 4,
@@ -144,6 +152,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-9",
+    titre: "Thème en 12/8, frisé puis roulé",
     niveau: 22,
     numero: 9,
     volume: 2,
@@ -161,6 +170,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-10",
+    titre: "Solo hommage à Steve Gadd — deuxième partie",
     niveau: 22,
     numero: 10,
     volume: 3,
@@ -179,6 +189,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-11",
+    titre: "Breaks jazz en roulé, crash/grosse caisse",
     niveau: 22,
     numero: 11,
     volume: 4,
@@ -196,6 +207,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-12",
+    titre: "Thème A, mesures 4/4 et 2/4",
     niveau: 22,
     numero: 12,
     volume: 2,
@@ -214,6 +226,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-13",
+    titre: "Thème B, mesures 7/8 et 2/4",
     niveau: 22,
     numero: 13,
     volume: 2,
@@ -232,6 +245,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-14",
+    titre: "Rythme brésilien, frisé et decrescendo du roulé",
     niveau: 22,
     numero: 14,
     volume: 2,
@@ -248,6 +262,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-15",
+    titre: "Solo frevo, déroulé de la partition",
     niveau: 22,
     numero: 15,
     volume: 2,
@@ -264,6 +279,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "22-16",
+    titre: "Solo frevo à apprendre par cœur",
     niveau: 22,
     numero: 16,
     volume: 2,
@@ -281,6 +297,6 @@ const lessons: Lesson[] = [
 
 export const niveau22: Niveau = {
   numero: 22,
-  titre: "Latin-Jazz, brésilien & solos de batterie",
+  titre: "Latin-jazz, breaks, jazz moderne, solos et frevo",
   lessons,
 };

@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "8-1",
+    titre: "Moulin en nuances et notes fantômes",
     niveau: 8,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-2",
+    titre: "Breaks mains et pieds en doubles croches",
     niveau: 8,
     numero: 2,
     volume: 3,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-3",
+    titre: "Binaire 13, breaks mains et pieds",
     niveau: 8,
     numero: 3,
     volume: 3,
@@ -57,6 +60,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-4",
+    titre: "Indépendance caisse claire en triolets de croches",
     niveau: 8,
     numero: 4,
     volume: 4,
@@ -74,6 +78,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-5",
+    titre: "Solo 7, récapitulation en ternaire",
     niveau: 8,
     numero: 5,
     volume: 4,
@@ -91,6 +96,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-6",
+    titre: "Double moulin et triple moulin",
     niveau: 8,
     numero: 6,
     volume: 2,
@@ -107,6 +113,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-7",
+    titre: "Frisé de 4, triolets de doubles croches",
     niveau: 8,
     numero: 7,
     volume: 2,
@@ -124,6 +131,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-8",
+    titre: "Marche de Ravel en frisé de 4",
     niveau: 8,
     numero: 8,
     volume: 2,
@@ -140,6 +148,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-9",
+    titre: "Breaks mains et pieds avec les toms",
     niveau: 8,
     numero: 9,
     volume: 3,
@@ -155,6 +164,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-10",
+    titre: "Binaire p. 35, breaks avec les toms",
     niveau: 8,
     numero: 10,
     volume: 3,
@@ -170,6 +180,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-11",
+    titre: "Indépendance des 4 membres en triolets",
     niveau: 8,
     numero: 11,
     volume: 4,
@@ -187,6 +198,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-12",
+    titre: "Solo 9, indépendance des 4 membres",
     niveau: 8,
     numero: 12,
     volume: 4,
@@ -204,6 +216,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-13",
+    titre: "Nuances en croches, doigté frisé",
     niveau: 8,
     numero: 13,
     volume: 2,
@@ -222,6 +235,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-14",
+    titre: "Nuances en croches, doigté roulé",
     niveau: 8,
     numero: 14,
     volume: 2,
@@ -240,6 +254,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-15",
+    titre: "Jeu en mesure 5/4",
     niveau: 8,
     numero: 15,
     volume: 2,
@@ -256,6 +271,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-16",
+    titre: "Breaks mains et pieds avec silences",
     niveau: 8,
     numero: 16,
     volume: 3,
@@ -271,6 +287,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-17",
+    titre: "Binaire 15, breaks avec silences",
     niveau: 8,
     numero: 17,
     volume: 3,
@@ -286,6 +303,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-18",
+    titre: "Indépendance des 4 membres avec les toms",
     niveau: 8,
     numero: 18,
     volume: 4,
@@ -303,6 +321,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "8-19",
+    titre: "Solo 10, indépendance avec les toms",
     niveau: 8,
     numero: 19,
     volume: 4,
@@ -322,6 +341,6 @@ const lessons: Lesson[] = [
 
 export const niveau08: Niveau = {
   numero: 8,
-  titre: "Moulins, coordination & indépendance ternaire",
+  titre: "Moulins, nuances, breaks et indépendance ternaire",
   lessons,
 };

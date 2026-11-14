@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "11-1",
+    titre: "Lecture en mesure 6/4",
     niveau: 11,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-2",
+    titre: "Breaks jazz en triolets frisés",
     niveau: 11,
     numero: 2,
     volume: 4,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-3",
+    titre: "Breaks jazz en triolets roulés",
     niveau: 11,
     numero: 3,
     volume: 4,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-4",
+    titre: "Triolets frisés, crash et grosse caisse",
     niveau: 11,
     numero: 4,
     volume: 4,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-5",
+    titre: "Triolets roulés, crash et grosse caisse",
     niveau: 11,
     numero: 5,
     volume: 4,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-6",
+    titre: "Lecture en mesure 7/4",
     niveau: 11,
     numero: 6,
     volume: 2,
@@ -110,6 +116,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-7",
+    titre: "Rythmes avec battement à la noire",
     niveau: 11,
     numero: 7,
     volume: 3,
@@ -126,6 +133,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-8",
+    titre: "Breaks sur battement à la noire",
     niveau: 11,
     numero: 8,
     volume: 3,
@@ -142,6 +150,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-9",
+    titre: "Breaks jazz, grosse caisse sur les temps",
     niveau: 11,
     numero: 9,
     volume: 4,
@@ -159,6 +168,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-10",
+    titre: "Breaks jazz, grosse caisse en l'air",
     niveau: 11,
     numero: 10,
     volume: 4,
@@ -176,6 +186,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-11",
+    titre: "Thème binaire interprété en ternaire",
     niveau: 11,
     numero: 11,
     volume: 2,
@@ -192,6 +203,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-12",
+    titre: "Battement de charleston sur les « et »",
     niveau: 11,
     numero: 12,
     volume: 3,
@@ -210,6 +222,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-13",
+    titre: "Binaire 25, pièce du niveau",
     niveau: 11,
     numero: 13,
     volume: 3,
@@ -226,6 +239,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-14",
+    titre: "Sortie du chabada traditionnel — p. 46",
     niveau: 11,
     numero: 14,
     volume: 4,
@@ -242,6 +256,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-15",
+    titre: "Sortie du chabada, triolets de noires",
     niveau: 11,
     numero: 15,
     volume: 4,
@@ -260,6 +275,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-16",
+    titre: "Thème ternaire, remplissage en shuffle",
     niveau: 11,
     numero: 16,
     volume: 2,
@@ -277,6 +293,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-17",
+    titre: "Thème ternaire, remplissage en bâtons mêlés",
     niveau: 11,
     numero: 17,
     volume: 2,
@@ -294,6 +311,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-18",
+    titre: "Rythmes avec battement croche-deux doubles",
     niveau: 11,
     numero: 18,
     volume: 3,
@@ -312,6 +330,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-19",
+    titre: "Breaks sur battement croche-deux doubles",
     niveau: 11,
     numero: 19,
     volume: 3,
@@ -328,6 +347,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-20",
+    titre: "Sortie du chabada, ride et notes fantômes",
     niveau: 11,
     numero: 20,
     volume: 4,
@@ -345,6 +365,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-21",
+    titre: "Trois façons de faire sonner la ride",
     niveau: 11,
     numero: 21,
     volume: 4,
@@ -363,6 +384,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-22",
+    titre: "Thème binaire joué d'une seule main",
     niveau: 11,
     numero: 22,
     volume: 2,
@@ -380,6 +402,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-23",
+    titre: "Thème ternaire joué d'une seule main",
     niveau: 11,
     numero: 23,
     volume: 2,
@@ -397,6 +420,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-24",
+    titre: "Rythmes avec battement deux doubles-croche",
     niveau: 11,
     numero: 24,
     volume: 3,
@@ -415,6 +439,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-25",
+    titre: "Binaire 27, breaks sur deux doubles-croche",
     niveau: 11,
     numero: 25,
     volume: 3,
@@ -431,6 +456,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-26",
+    titre: "Solo 14, première page",
     niveau: 11,
     numero: 26,
     volume: 4,
@@ -449,6 +475,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "11-27",
+    titre: "Solo 14, deuxième page",
     niveau: 11,
     numero: 27,
     volume: 4,
@@ -469,6 +496,6 @@ const lessons: Lesson[] = [
 
 export const niveau11: Niveau = {
   numero: 11,
-  titre: "Mesures impaires, ternaire & jeu jazz",
+  titre: "Breaks jazz, chabada, battements et thèmes",
   lessons,
 };

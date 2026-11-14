@@ -109,7 +109,7 @@ export function CalendarView({ onDashboard, onOpenLesson }: Props) {
                     <button
                       type="button"
                       onClick={() => onOpenLesson(s.lessonId)}
-                      className="flex w-full items-center justify-between rounded-lg border border-line bg-panel/60 px-3 py-2 text-left transition-colors hover:border-amber/50"
+                      className="flex w-full items-center justify-between rounded-lg border border-line bg-panel px-3 py-2 text-left transition-colors hover:border-amber/50"
                     >
                       <span className="font-mono text-sm text-ink">
                         {s.lessonId}

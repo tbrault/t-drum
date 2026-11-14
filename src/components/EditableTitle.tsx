@@ -3,10 +3,8 @@ import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  /** Titre affiché ("" = aucun). */
+  /** Titre affiché ("" = aucun : seul le crayon reste visible). */
   value: string;
-  /** Texte affiché, et suggéré à la saisie, quand il n'y a pas de titre. */
-  placeholder: string;
   /** Reçoit le nouveau titre sans espaces autour ("" = effacé). */
   onSave: (titre: string) => void;
   className?: string;
@@ -16,12 +14,7 @@ interface Props {
  * Titre modifiable sur place : un clic ouvre un champ de saisie, Entrée (ou
  * un clic ailleurs) valide, Échap annule.
  */
-export function EditableTitle({
-  value,
-  placeholder,
-  onSave,
-  className,
-}: Props) {
+export function EditableTitle({ value, onSave, className }: Props) {
   /** `null` = lecture ; sinon le texte en cours de saisie. */
   const [draft, setDraft] = useState<string | null>(null);
   // Échap démonte le champ, ce qui peut déclencher un blur : ne pas valider.
@@ -41,9 +34,7 @@ export function EditableTitle({
           className,
         )}
       >
-        <span className={cn("min-w-0", !value && "text-ink-faint")}>
-          {value || placeholder}
-        </span>
+        {value && <span className="min-w-0">{value}</span>}
         <Pencil className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-colors group-hover/title:text-amber" />
       </button>
     );
@@ -61,7 +52,6 @@ export function EditableTitle({
       // biome-ignore lint/a11y/noAutofocus: le champ n'apparaît que sur clic de l'utilisateur
       autoFocus
       value={draft}
-      placeholder={placeholder}
       aria-label="Titre"
       onChange={(e) => setDraft(e.target.value)}
       onFocus={(e) => e.target.select()}
@@ -74,7 +64,7 @@ export function EditableTitle({
         }
       }}
       className={cn(
-        "block w-full rounded-md border border-amber/60 bg-panel px-2.5 py-1 text-ink placeholder:text-ink-faint focus:outline-none",
+        "block w-full rounded-md border border-amber/60 bg-panel px-2.5 py-1 text-ink focus:outline-none",
         className,
       )}
     />

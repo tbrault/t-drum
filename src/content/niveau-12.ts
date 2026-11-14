@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "12-1",
+    titre: "Thème B en croches frisées",
     niveau: 12,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-2",
+    titre: "Thème B en croches roulées",
     niveau: 12,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-3",
+    titre: "Changements de mesures, thème A",
     niveau: 12,
     numero: 3,
     volume: 2,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-4",
+    titre: "Lecture rythmique à la grosse caisse",
     niveau: 12,
     numero: 4,
     volume: 3,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-5",
+    titre: "Phrases clés en ternaire et coordination",
     niveau: 12,
     numero: 5,
     volume: 4,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-6",
+    titre: "Thème B en triolets frisés",
     niveau: 12,
     numero: 6,
     volume: 2,
@@ -110,6 +116,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-7",
+    titre: "Thème B en triolets roulés",
     niveau: 12,
     numero: 7,
     volume: 2,
@@ -127,6 +134,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-8",
+    titre: "Art de faire chanter la cymbale ride",
     niveau: 12,
     numero: 8,
     volume: 3,
@@ -143,6 +151,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-9",
+    titre: "Solo 15 (Elvin Jones), première page",
     niveau: 12,
     numero: 9,
     volume: 4,
@@ -161,6 +170,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-10",
+    titre: "Solo 15 (Elvin Jones), deuxième page",
     niveau: 12,
     numero: 10,
     volume: 4,
@@ -178,6 +188,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-11",
+    titre: "Thème en doubles croches frisées",
     niveau: 12,
     numero: 11,
     volume: 2,
@@ -195,6 +206,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-12",
+    titre: "Thème en doubles croches roulées",
     niveau: 12,
     numero: 12,
     volume: 2,
@@ -212,6 +224,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-13",
+    titre: "Changements de mesures, thème B",
     niveau: 12,
     numero: 13,
     volume: 2,
@@ -229,6 +242,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-14",
+    titre: "Nuances de caisse claire dans les grooves",
     niveau: 12,
     numero: 14,
     volume: 3,
@@ -245,6 +259,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-15",
+    titre: "Binaire 28, breaks et notes fantômes",
     niveau: 12,
     numero: 15,
     volume: 3,
@@ -261,6 +276,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-16",
+    titre: "Vocabulaire de 4/4 en jazz — p. 56",
     niveau: 12,
     numero: 16,
     volume: 4,
@@ -277,6 +293,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-17",
+    titre: "Vocabulaire de 4/4 en jazz — p. 57",
     niveau: 12,
     numero: 17,
     volume: 4,
@@ -295,6 +312,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-18",
+    titre: "Moulin dans les grooves et binaire 29",
     niveau: 12,
     numero: 18,
     volume: 3,
@@ -312,6 +330,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-19",
+    titre: "Accents déplacés en frisé et en roulé",
     niveau: 12,
     numero: 19,
     volume: 2,
@@ -330,6 +349,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-20",
+    titre: "Marche, pièce du niveau — p. 71",
     niveau: 12,
     numero: 20,
     volume: 2,
@@ -348,6 +368,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-21",
+    titre: "Grooves sans battement fixe de charleston",
     niveau: 12,
     numero: 21,
     volume: 3,
@@ -365,6 +386,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "12-22",
+    titre: "Binaire 30, pièce du niveau",
     niveau: 12,
     numero: 22,
     volume: 3,
@@ -384,6 +406,6 @@ const lessons: Lesson[] = [
 
 export const niveau12: Niveau = {
   numero: 12,
-  titre: "Thèmes, breaks & indépendance ternaire-binaire",
+  titre: "Frisé, roulé, solos jazz et grooves nuancés",
   lessons,
 };

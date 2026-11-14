@@ -23,6 +23,8 @@ export interface Consignes {
 export interface Lesson {
   /** Identifiant unique, ex. "7-9" (niveau-numéro). */
   id: string;
+  /** Titre court : ce que la leçon fait travailler. */
+  titre?: string;
   niveau: number;
   /** Numéro continu de la leçon dans le niveau. */
   numero: number;

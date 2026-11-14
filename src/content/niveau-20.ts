@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "20-1",
+    titre: "Croches roulées, mains simultanées",
     niveau: 20,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-2",
+    titre: "Mélange de mesures 4/4 et 7/8",
     niveau: 20,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-3",
+    titre: "Breaks en sextolets de doubles croches",
     niveau: 20,
     numero: 3,
     volume: 3,
@@ -59,6 +62,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-4",
+    titre: "Clave afro-cubaine et versions de la rumba",
     niveau: 20,
     numero: 4,
     volume: 4,
@@ -76,6 +80,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-5",
+    titre: "Triolets de croches roulées, mains simultanées",
     niveau: 20,
     numero: 5,
     volume: 2,
@@ -93,6 +98,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-6",
+    titre: "Clave et versions de cascara",
     niveau: 20,
     numero: 6,
     volume: 2,
@@ -110,6 +116,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-7",
+    titre: "Clave et versions de cascara (suite)",
     niveau: 20,
     numero: 7,
     volume: 4,
@@ -127,6 +134,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-8",
+    titre: "Hommage aux batteurs modernes, pièce du niveau",
     niveau: 20,
     numero: 8,
     volume: 3,
@@ -145,6 +153,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-9",
+    titre: "Clave et 2 nouvelles versions de cascara",
     niveau: 20,
     numero: 9,
     volume: 4,
@@ -162,6 +171,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-10",
+    titre: "Jeu jazz, grosse caisse et ride synchronisées",
     niveau: 20,
     numero: 10,
     volume: 4,
@@ -178,6 +188,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-11",
+    titre: "Breaks afro-cubains en 4/4 sur cascara",
     niveau: 20,
     numero: 11,
     volume: 4,
@@ -196,6 +207,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-12",
+    titre: "Thème syncopé à la caisse claire",
     niveau: 20,
     numero: 12,
     volume: 2,
@@ -213,6 +225,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-13",
+    titre: "Mesures 4/4 et 2/4, mélange binaire/ternaire",
     niveau: 20,
     numero: 13,
     volume: 2,
@@ -230,6 +243,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-14",
+    titre: "Breaks en doubles croches et sextolets",
     niveau: 20,
     numero: 14,
     volume: 3,
@@ -247,6 +261,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-15",
+    titre: "Motifs jazz mains et pieds aux toms",
     niveau: 20,
     numero: 15,
     volume: 4,
@@ -264,6 +279,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "20-16",
+    titre: "Breaks afro-cubains en 4/4 sur cascara (suite)",
     niveau: 20,
     numero: 16,
     volume: 4,
@@ -284,6 +300,6 @@ const lessons: Lesson[] = [
 
 export const niveau20: Niveau = {
   numero: 20,
-  titre: "Sextolets, breaks modernes & rythmes Afro-Cubains",
+  titre: "Croches roulées, sextolets, jazz et afro-cubain",
   lessons,
 };

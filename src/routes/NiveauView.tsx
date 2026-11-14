@@ -52,7 +52,6 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
           {/* Revenir au titre d'origine (ou tout effacer) retire la personnalisation. */}
           <EditableTitle
             value={titre}
-            placeholder="Ajouter un titre"
             onSave={(next) =>
               progressStore.setNiveauTitre(
                 niveau.numero,
@@ -95,7 +94,7 @@ export function NiveauView({ numero, onDashboard, onOpenLesson }: Props) {
                 </span>
                 <div className="h-px flex-1 bg-line-soft" />
               </div>
-              <div className="overflow-hidden rounded-xl border border-line bg-panel/60">
+              <div className="overflow-hidden rounded-xl border border-line bg-panel">
                 {lessons.map((lesson) => (
                   <LessonRow
                     key={lesson.id}

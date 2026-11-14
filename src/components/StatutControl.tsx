@@ -14,8 +14,24 @@ export function StatutBadge({ statut }: { statut: Statut }) {
           s.color,
         )}
       >
-        {s.short}
+        {s.label}
       </span>
+    </span>
+  );
+}
+
+/** Statut mis en avant (lecture seule), pour l'en-tête d'une leçon. */
+export function StatutPill({ statut }: { statut: Statut }) {
+  const s = STATUTS[statut];
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider",
+        s.active,
+      )}
+    >
+      <span className={cn("h-2 w-2 rounded-full", s.dot)} />
+      {s.label}
     </span>
   );
 }
@@ -25,7 +41,10 @@ interface ControlProps {
   onChange: (statut: Statut) => void;
 }
 
-/** Sélecteur segmenté de statut (façon boutons de transport). */
+/**
+ * Sélecteur segmenté de statut, pour les rares leçons sans tempo cible (les
+ * autres ont un statut calculé).
+ */
 export function StatutControl({ value, onChange }: ControlProps) {
   return (
     <div className="inline-flex rounded-lg border border-line bg-base p-1">
@@ -36,12 +55,13 @@ export function StatutControl({ value, onChange }: ControlProps) {
           <button
             key={statut}
             type="button"
+            aria-pressed={active}
             onClick={() => onChange(statut)}
             className={cn(
-              "flex items-center gap-2 rounded-md px-3.5 py-2 font-mono text-xs uppercase tracking-wider transition-colors",
+              "flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors",
               active
-                ? "bg-raised text-ink"
-                : "text-ink-faint hover:text-ink-muted",
+                ? s.active
+                : "text-ink-faint hover:bg-raised/60 hover:text-ink",
             )}
           >
             <span

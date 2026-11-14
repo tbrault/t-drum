@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "13-1",
+    titre: "Coups en répétition et roulement en nuances",
     niveau: 13,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-2",
+    titre: "Crash et grosse caisse en doubles croches",
     niveau: 13,
     numero: 2,
     volume: 3,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-3",
+    titre: "4/4 plus difficiles en jazz — p. 58",
     niveau: 13,
     numero: 3,
     volume: 4,
@@ -60,6 +63,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-4",
+    titre: "4/4 plus difficiles en jazz — p. 59",
     niveau: 13,
     numero: 4,
     volume: 4,
@@ -78,6 +82,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-5",
+    titre: "Changements de mesures, thème A",
     niveau: 13,
     numero: 5,
     volume: 2,
@@ -95,6 +100,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-6",
+    titre: "Binaire 31, rythmes et breaks pop/rock",
     niveau: 13,
     numero: 6,
     volume: 3,
@@ -111,6 +117,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-7",
+    titre: "Découverte du jeu en big band",
     niveau: 13,
     numero: 7,
     volume: 4,
@@ -128,6 +135,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-8",
+    titre: "Changements de mesures, thème B",
     niveau: 13,
     numero: 8,
     volume: 2,
@@ -145,6 +153,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-9",
+    titre: "Lecture du solfège syncopé — p. 164",
     niveau: 13,
     numero: 9,
     volume: 2,
@@ -162,6 +171,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-10",
+    titre: "Crash et grosse caisse sans remplissage",
     niveau: 13,
     numero: 10,
     volume: 3,
@@ -179,6 +189,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-11",
+    titre: "Jeu en big band (suite)",
     niveau: 13,
     numero: 11,
     volume: 4,
@@ -196,6 +207,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-12",
+    titre: "Solfège syncopé binaire et ternaire — p. 166",
     niveau: 13,
     numero: 12,
     volume: 2,
@@ -214,6 +226,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-13",
+    titre: "Solfège syncopé binaire et ternaire — p. 167",
     niveau: 13,
     numero: 13,
     volume: 2,
@@ -232,6 +245,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-14",
+    titre: "Thème avec remplissage en moulin",
     niveau: 13,
     numero: 14,
     volume: 2,
@@ -249,6 +263,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-15",
+    titre: "Binaire 32, pièce du niveau",
     niveau: 13,
     numero: 15,
     volume: 3,
@@ -266,6 +281,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-16",
+    titre: "Big band, solfège syncopé en ternaire",
     niveau: 13,
     numero: 16,
     volume: 4,
@@ -284,6 +300,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-17",
+    titre: "Marche dans le style brésilien",
     niveau: 13,
     numero: 17,
     volume: 2,
@@ -301,6 +318,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "13-18",
+    titre: "Big band, syncopé et durées de notes",
     niveau: 13,
     numero: 18,
     volume: 4,
@@ -321,6 +339,6 @@ const lessons: Lesson[] = [
 
 export const niveau13: Niveau = {
   numero: 13,
-  titre: "Big Band, solfège syncopé & breaks Pop/Rock",
+  titre: "Big band, solfège syncopé, 4/4 et breaks pop/rock",
   lessons,
 };

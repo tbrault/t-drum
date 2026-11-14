@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "19-1",
+    titre: "Remplissage moulin, triolets de la même main",
     niveau: 19,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-2",
+    titre: "Mélange de mesures 2/4, 4/4 et 5/8",
     niveau: 19,
     numero: 2,
     volume: 2,
@@ -42,6 +44,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-3",
+    titre: "Chant cymbale en 12/8 et polyrythmie",
     niveau: 19,
     numero: 3,
     volume: 3,
@@ -60,6 +63,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-4",
+    titre: "Remplissage moulin, triolets en frisé",
     niveau: 19,
     numero: 4,
     volume: 2,
@@ -77,6 +81,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-5",
+    titre: "Frisé et quintolets, changement de débit",
     niveau: 19,
     numero: 5,
     volume: 2,
@@ -95,6 +100,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-6",
+    titre: "Frisé et quintolets, changement de débit (suite)",
     niveau: 19,
     numero: 6,
     volume: 2,
@@ -113,6 +119,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-7",
+    titre: "Grooves dans l'esprit blues et soul",
     niveau: 19,
     numero: 7,
     volume: 3,
@@ -131,6 +138,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-8",
+    titre: "Solfège syncopé en binaire et en ternaire",
     niveau: 19,
     numero: 8,
     volume: 2,
@@ -149,6 +157,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-9",
+    titre: "Groove binaire/ternaire et rythme « Rosanna »",
     niveau: 19,
     numero: 9,
     volume: 3,
@@ -167,6 +176,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-10",
+    titre: "Marche et rigodon 6, maîtrise des fla",
     niveau: 19,
     numero: 10,
     volume: 2,
@@ -185,6 +195,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-11",
+    titre: "Groove binaire/ternaire au double-moulin",
     niveau: 19,
     numero: 11,
     volume: 3,
@@ -203,6 +214,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-12",
+    titre: "Marche et rigodon 5, sextolets/septolets",
     niveau: 19,
     numero: 12,
     volume: 2,
@@ -221,6 +233,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-13",
+    titre: "Rythmes typiques, 2 versions plus recherchées",
     niveau: 19,
     numero: 13,
     volume: 4,
@@ -238,6 +251,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "19-14",
+    titre: "Breaks pour le rythme bembe",
     niveau: 19,
     numero: 14,
     volume: 4,
@@ -257,6 +271,6 @@ const lessons: Lesson[] = [
 
 export const niveau19: Niveau = {
   numero: 19,
-  titre: "Remplissage, groove & lecture syncopée",
+  titre: "Remplissage, groove, lecture syncopée et marches",
   lessons,
 };

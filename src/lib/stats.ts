@@ -1,8 +1,10 @@
 import type { Niveau } from "@/content/types";
 import { defaultProgress, type LessonProgress } from "@/progress/types";
+import { estAcquise } from "./statut";
 
 export interface Stats {
   total: number;
+  /** Leçons validées ou maîtrisées. */
   acquises: number;
   enCours: number;
   aFaire: number;
@@ -27,7 +29,7 @@ export function globalStats(niveaux: Niveau[], map: ProgressMap): Stats {
 
 function computeStats(items: LessonProgress[]): Stats {
   const total = items.length;
-  const acquises = items.filter((p) => p.statut === "acquise").length;
+  const acquises = items.filter((p) => estAcquise(p.statut)).length;
   const enCours = items.filter((p) => p.statut === "en-cours").length;
   const aFaire = total - acquises - enCours;
   const pct =

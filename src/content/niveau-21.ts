@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "21-1",
+    titre: "Thème syncopé en 3 temps avec ostinato",
     niveau: 21,
     numero: 1,
     volume: 2,
@@ -26,6 +27,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-2",
+    titre: "Thème syncopé en 3 temps, en ternaire",
     niveau: 21,
     numero: 2,
     volume: 2,
@@ -44,6 +46,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-3",
+    titre: "Indépendance en 7/8, battements différents",
     niveau: 21,
     numero: 3,
     volume: 3,
@@ -62,6 +65,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-4",
+    titre: "Indépendance ternaire à la pédale de charleston",
     niveau: 21,
     numero: 4,
     volume: 4,
@@ -79,6 +83,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-5",
+    titre: "Thème syncopé en 4 temps, remplissage frisé",
     niveau: 21,
     numero: 5,
     volume: 2,
@@ -97,6 +102,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-6",
+    titre: "Indépendance en 7/8, battements différents (suite)",
     niveau: 21,
     numero: 6,
     volume: 3,
@@ -115,6 +121,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-7",
+    titre: "Thème syncopé en 4 temps, en ternaire",
     niveau: 21,
     numero: 7,
     volume: 2,
@@ -133,6 +140,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-8",
+    titre: "Thème afro-ternaire en finesse, notes fantômes",
     niveau: 21,
     numero: 8,
     volume: 2,
@@ -149,6 +157,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-9",
+    titre: "Thème afro-ternaire en puissance, dôme et toms",
     niveau: 21,
     numero: 9,
     volume: 2,
@@ -165,6 +174,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-10",
+    titre: "Indépendance en 9/8, battements différents",
     niveau: 21,
     numero: 10,
     volume: 3,
@@ -182,6 +192,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-11",
+    titre: "Mélange binaire/ternaire en triolets de noires",
     niveau: 21,
     numero: 11,
     volume: 2,
@@ -198,6 +209,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-12",
+    titre: "Thème en doubles croches, frisé puis roulé",
     niveau: 21,
     numero: 12,
     volume: 2,
@@ -215,6 +227,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-13",
+    titre: "Indépendance en 11/8, battements différents",
     niveau: 21,
     numero: 13,
     volume: 3,
@@ -232,6 +245,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-14",
+    titre: "Thème en 6/8, frisé puis roulé",
     niveau: 21,
     numero: 14,
     volume: 2,
@@ -249,6 +263,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-15",
+    titre: "Marche et final des rigodons, quintolets",
     niveau: 21,
     numero: 15,
     volume: 2,
@@ -267,6 +282,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-16",
+    titre: "Solo hommage à Tony Williams — p. 140",
     niveau: 21,
     numero: 16,
     volume: 3,
@@ -285,6 +301,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-17",
+    titre: "Marche et 3 dianes, sextolets/septolets",
     niveau: 21,
     numero: 17,
     volume: 2,
@@ -303,6 +320,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-18",
+    titre: "Solo hommage à Tony Williams — p. 141",
     niveau: 21,
     numero: 18,
     volume: 3,
@@ -321,6 +339,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "21-19",
+    titre: "Solo hommage à Tony Williams — p. 141 (suite)",
     niveau: 21,
     numero: 19,
     volume: 3,
@@ -341,6 +360,6 @@ const lessons: Lesson[] = [
 
 export const niveau21: Niveau = {
   numero: 21,
-  titre: "Mesures composées, indépendance & solos modernes",
+  titre: "Thèmes syncopés, indépendance, marches et solo",
   lessons,
 };

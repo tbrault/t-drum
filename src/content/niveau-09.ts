@@ -8,6 +8,7 @@ import type { Lesson, Niveau } from "./types";
 const lessons: Lesson[] = [
   {
     id: "9-1",
+    titre: "Rudiments du tambour à la caisse claire",
     niveau: 9,
     numero: 1,
     volume: 2,
@@ -25,6 +26,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-2",
+    titre: "Première marche de tambour militaire",
     niveau: 9,
     numero: 2,
     volume: 2,
@@ -41,6 +43,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-3",
+    titre: "Deuxième marche de tambour militaire",
     niveau: 9,
     numero: 3,
     volume: 2,
@@ -58,6 +61,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-4",
+    titre: "Ouverture et fermeture de la charleston",
     niveau: 9,
     numero: 4,
     volume: 3,
@@ -73,6 +77,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-5",
+    titre: "Binaire du niveau avec ouvertures de charleston",
     niveau: 9,
     numero: 5,
     volume: 3,
@@ -90,6 +95,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-6",
+    titre: "Indépendance caisse claire, toms et grosse caisse",
     niveau: 9,
     numero: 6,
     volume: 4,
@@ -107,6 +113,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-7",
+    titre: "Solo 11, ternaire et endurance",
     niveau: 9,
     numero: 7,
     volume: 4,
@@ -124,6 +131,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-8",
+    titre: "Thème en mesure 9/8",
     niveau: 9,
     numero: 8,
     volume: 2,
@@ -140,6 +148,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-9",
+    titre: "Thème en mesure 12/8",
     niveau: 9,
     numero: 9,
     volume: 2,
@@ -156,6 +165,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-10",
+    titre: "Caisse claire et grosse caisse simultanées",
     niveau: 9,
     numero: 10,
     volume: 3,
@@ -171,6 +181,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-11",
+    titre: "Ouvertures de charleston et prise de vitesse",
     niveau: 9,
     numero: 11,
     volume: 3,
@@ -188,6 +199,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-12",
+    titre: "Rythmes funk en frisé à la charleston",
     niveau: 9,
     numero: 12,
     volume: 3,
@@ -205,6 +217,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-13",
+    titre: "Binaire p. 43, mise en application",
     niveau: 9,
     numero: 13,
     volume: 3,
@@ -221,6 +234,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-14",
+    titre: "Chabada en 3 temps",
     niveau: 9,
     numero: 14,
     volume: 4,
@@ -237,6 +251,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-15",
+    titre: "Breaks ternaires en 3 temps",
     niveau: 9,
     numero: 15,
     volume: 4,
@@ -254,6 +269,7 @@ const lessons: Lesson[] = [
   },
   {
     id: "9-16",
+    titre: "Solo en 3/4 jazz, rythmes et breaks",
     niveau: 9,
     numero: 16,
     volume: 4,
@@ -272,6 +288,6 @@ const lessons: Lesson[] = [
 
 export const niveau09: Niveau = {
   numero: 9,
-  titre: "Charleston, mesures composées & ternaire",
+  titre: "Rudiments, charleston, 12/8 et chabada en 3 temps",
   lessons,
 };
