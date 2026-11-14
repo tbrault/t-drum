@@ -104,6 +104,17 @@ class ProgressStore {
     this.set(lessonId, { rythmes });
   }
 
+  /** Déplace un rythme à la position d'un autre, dans la même leçon. */
+  moveRythme(lessonId: string, rythmeId: string, targetId: string): void {
+    const rythmes = [...this.get(lessonId).rythmes];
+    const from = rythmes.findIndex((r) => r.id === rythmeId);
+    const to = rythmes.findIndex((r) => r.id === targetId);
+    if (from < 0 || to < 0 || from === to) return;
+    const [moved] = rythmes.splice(from, 1);
+    rythmes.splice(to, 0, moved);
+    this.set(lessonId, { rythmes });
+  }
+
   /** Change le statut et gère le suivi de révision (init à l'acquisition). */
   setStatut(lessonId: string, statut: Statut): void {
     const current = this.get(lessonId);
