@@ -18,7 +18,7 @@ import * as Tone from "tone";
  * la place à la batterie. Un break d'ouverture se joue seul, juste après le
  * décompte. Un morceau de longueur fixée finit sur un accord.
  *
- * Échantillons : banque Musyng Kite (CC BY-SA 3.0), voir public/sons/CREDITS.
+ * Échantillons : enregistrements libres, voir public/sons/CREDITS.md.
  */
 
 export type StyleAccompagnement =
@@ -792,51 +792,62 @@ function composer(
 
 // --- Instruments -----------------------------------------------------------
 
-const CLAVIER = "C3 Eb3 Gb3 A3 C4 Eb4 Gb4 A4 C5 Eb5 Gb5 A5 C6";
-const GRAVE = "E1 G1 Bb1 Db2 E2 G2 Bb2 Db3 E3 G3";
-const TROMPETTE = "E3 G3 Bb3 Db4 E4 G4 Bb4 Db5 E5 G5 Bb5";
-const GUITARE = "E2 G2 Bb2 Db3 E3 G3 Bb3 Db4 E4 G4 Bb4 Db5 E5";
+interface Echantillons {
+  dossier: string;
+  /** Notes enregistrées (les autres sont transposées depuis la plus proche). */
+  notes: string;
+  volume: number;
+  release: number;
+}
 
-/** Dossier des échantillons, notes enregistrées et volume de chaque instrument. */
-const ECHANTILLONS: Record<
-  Instrument,
-  { dossier: string; notes: string; volume: number; release: number }
-> = {
+const GUITARE = "C#2 E2 F#2 A2 C3 D#3 F#3 A3 C4 D#4 F#4 A4 C5 D#5 F#5 A5";
+
+/**
+ * De vrais enregistrements, note par note (public/sons/, préparés par
+ * scripts/telecharger-sons.py). Volumes réglés pour un mélange équilibré.
+ */
+const ECHANTILLONS: Record<Instrument, Echantillons> = {
   piano: {
-    dossier: "acoustic_grand_piano",
-    notes: CLAVIER,
-    volume: -4,
+    dossier: "piano",
+    notes: "C3 D#3 F#3 A3 C4 D#4 F#4 A4 C5 D#5 F#5 A5 C6",
+    volume: 4,
     release: 1,
   },
   rhodes: {
-    dossier: "electric_piano_1",
-    notes: CLAVIER,
-    volume: -6,
-    release: 1,
+    dossier: "rhodes",
+    notes: "A2 D3 G3 B3 D4 F4 B4",
+    volume: -14,
+    release: 0.4,
   },
   contrebasse: {
-    dossier: "acoustic_bass",
-    notes: GRAVE,
-    volume: 3,
+    dossier: "contrebasse",
+    notes: "Eb1 Gb1 A1 C2 Eb2 Gb2 A2 C3 Eb3 Gb3",
+    volume: -6,
     release: 0.4,
   },
   basse: {
-    dossier: "electric_bass_finger",
-    notes: GRAVE,
-    volume: 2,
+    dossier: "basse",
+    notes: "E1 G1 A#1 C#2 E2 G2 A#2 C#3 E3 G3",
+    volume: -5,
     release: 0.2,
   },
-  trompette: { dossier: "trumpet", notes: TROMPETTE, volume: -3, release: 0.3 },
+  trompette: {
+    dossier: "trompette",
+    notes: "F3 A3 C4 D#4 F4 G4 A#4 D5 F5 A5 C6",
+    volume: -12,
+    release: 0.3,
+  },
+  // La guitare saturée est la même guitare, passée dans l'ampli (voir plus bas).
   guitareSaturee: {
-    dossier: "overdriven_guitar",
+    dossier: "guitare",
     notes: GUITARE,
-    volume: -6,
+    volume: -4,
     release: 0.15,
   },
   guitareClaire: {
-    dossier: "electric_guitar_clean",
+    dossier: "guitare",
     notes: GUITARE,
-    volume: -2,
+    volume: -9.5,
     release: 0.2,
   },
 };
@@ -847,46 +858,65 @@ let sortie: Tone.Gain | null = null;
 let chargement: Promise<void> | null = null;
 
 /**
- * Charge les échantillons une seule fois. Sortie : réverbération légère,
- * compresseur et gain pour un son plein et très fort, limiteur et arrondi
- * des crêtes contre la saturation.
+ * Sortie : compression pour lier les instruments et donner du volume,
+ * limiteur, puis un arrondi qui ne touche que les crêtes (le son reste intact
+ * en dessous de 80 % du maximum).
  */
+function chaineDeSortie(): Tone.ToneAudioNode {
+  const arrondi = new Tone.WaveShaper((x) => {
+    const a = Math.abs(x);
+    if (a <= 0.8) return x;
+    return Math.sign(x) * (0.8 + 0.18 * Math.tanh((a - 0.8) / 0.18));
+  }, 8192).toDestination();
+  arrondi.oversample = "4x";
+  const limiteur = new Tone.Limiter(-4).connect(arrondi);
+  const gain = new Tone.Gain(Tone.dbToGain(8)).connect(limiteur);
+  sortie = gain;
+  return new Tone.Compressor({
+    threshold: -24,
+    ratio: 4,
+    attack: 0.003,
+    release: 0.15,
+  }).connect(gain);
+}
+
+/**
+ * Ampli de la guitare saturée : une saturation, puis un filtre qui imite le
+ * haut-parleur (pas d'aigus criards).
+ */
+function ampli(vers: Tone.ToneAudioNode): Tone.ToneAudioNode {
+  const niveau = new Tone.Gain(Tone.dbToGain(-5)).connect(vers);
+  const grave = new Tone.Filter(90, "highpass").connect(niveau);
+  const hautParleur = new Tone.Filter({
+    frequency: 3600,
+    type: "lowpass",
+    rolloff: -24,
+  }).connect(grave);
+  const saturation = new Tone.Distortion(0.35).connect(hautParleur);
+  saturation.oversample = "4x";
+  return saturation;
+}
+
+/** Charge les échantillons une seule fois. */
 function chargerInstruments(): Promise<void> {
   chargement ??= (async () => {
-    // Fort par-dessus une batterie : la musique est tassée (compresseur),
-    // poussée contre le limiteur, puis ses dernières crêtes sont arrondies
-    // (le limiteur du navigateur en laisse passer : sans ça, le son grésille).
-    const arrondi = new Tone.WaveShaper(
-      (x) => 0.97 * Math.tanh(1.5 * x),
-      4096,
-    ).toDestination();
-    arrondi.oversample = "4x";
-    const limiteur = new Tone.Limiter(-1).connect(arrondi);
-    const gain = new Tone.Gain(Tone.dbToGain(18)).connect(limiteur);
-    sortie = gain;
-    const compresseur = new Tone.Compressor({
-      threshold: -28,
-      ratio: 4,
-      attack: 0.01,
-      release: 0.2,
-    }).connect(gain);
     const reverb = new Tone.Reverb({ decay: 1.8, wet: 0.14 }).connect(
-      compresseur,
+      chaineDeSortie(),
     );
     const liste = {} as Record<Instrument, Tone.Sampler>;
     for (const [instrument, e] of Object.entries(ECHANTILLONS) as [
       Instrument,
-      (typeof ECHANTILLONS)[Instrument],
+      Echantillons,
     ][]) {
       const urls = Object.fromEntries(
-        e.notes.split(" ").map((n) => [n, `${n}.mp3`]),
+        e.notes.split(" ").map((n) => [n, `${n.replace("#", "s")}.flac`]),
       );
       liste[instrument] = new Tone.Sampler({
         urls,
         baseUrl: `/sons/${e.dossier}/`,
         release: e.release,
         volume: e.volume,
-      }).connect(reverb);
+      }).connect(instrument === "guitareSaturee" ? ampli(reverb) : reverb);
     }
     await Tone.loaded();
     samplers = liste;

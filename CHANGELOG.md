@@ -5,6 +5,21 @@ Suivi des évolutions de T-Drum, de la plus récente à la plus ancienne.
 Numérotation : une nouvelle fonctionnalité (`feat`) fait monter le numéro du
 milieu (1.**1**.0), une correction (`fix`) fait monter le dernier (1.1.**1**).
 
+## 1.9.0 — 2026-11-15
+
+### Modifié
+
+- Accompagnement : les sons de synthèse sont remplacés par de vrais
+  enregistrements, note par note — piano à queue, Rhodes de 1977,
+  contrebasse jouée aux doigts, basse électrique, guitare électrique,
+  trompette. La guitare saturée est la vraie guitare passée dans un ampli
+  simulé (saturation et haut-parleur).
+- Son plus propre : la sortie n'écrase plus la musique. Elle est un peu
+  moins forte qu'en 1.8.0 ; le volume se rattrape sur le Mac ou le casque.
+- Échantillons : environ 7 Mo embarqués dans l'app, sources et licences dans
+  public/sons/CREDITS.md. Ils se régénèrent avec
+  `python3 -I scripts/telecharger-sons.py`.
+
 ## 1.8.0 — 2026-11-14
 
 ### Ajouté
